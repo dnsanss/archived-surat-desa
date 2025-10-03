@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDataWarga extends CreateRecord
 {
     protected static string $resource = DataWargaResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

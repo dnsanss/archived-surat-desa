@@ -25,6 +25,7 @@ class KarangasemPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->brandName('ADMIN DESA KARANGASEM')
             ->id('karangasem')
             ->path('karangasem')
             ->login()
@@ -37,10 +38,6 @@ class KarangasemPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
-            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

@@ -10,10 +10,8 @@ class EditDataWarga extends EditRecord
 {
     protected static string $resource = DataWargaResource::class;
 
-    protected function getHeaderActions(): array
+    protected function getRedirectUrl(): string
     {
-        return [
-            DeleteAction::make(),
-        ];
+        return $this->getResource()::getUrl('index');
     }
 }
