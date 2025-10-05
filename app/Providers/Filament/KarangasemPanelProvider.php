@@ -27,7 +27,7 @@ class KarangasemPanelProvider extends PanelProvider
             ->default()
             ->brandName('ADMIN DESA KARANGASEM')
             ->id('karangasem')
-            ->path('karangasem')
+            ->path('admin')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
