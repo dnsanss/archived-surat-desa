@@ -1,7 +1,7 @@
 @include('layouts.navbar')
 <!-- Hero Section -->
 {{-- SECTION: Hero Profil Desa --}}
-<div class="pt-10">
+<div class="pt-10 font-['Montserrat']">
     <section class="text-center">
         <div class="relative">
             {{-- Gambar background --}}
@@ -13,46 +13,143 @@
 
             {{-- Teks di atas gambar --}}
             <div class="absolute inset-0 flex flex-col justify-center items-center text-white px-6 sm:px-10 md:px-16 lg:px-24 text-center">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 drop-shadow-lg leading-tight">
-                    Profil Desa Karangasem
-                </h2>
-                <p class="max-w-2xl text-base sm:text-lg md:text-xl drop-shadow-md leading-relaxed">
-                    Desa Karangasem adalah salah satu desa di wilayah Kecamatan Lumbang, Kabupaten Pasuruan, Provinsi Jawa Timur.
-                    Terletak di daerah yang kaya akan budaya dan tradisi, desa ini memiliki potensi alam yang indah serta masyarakat yang ramah dan gotong royong.
-                    Mari kita jelajahi lebih dalam tentang sejarah, visi, dan misi desa kami.
-                </p>
+                <h3 class="text-3xl sm:text-4xl md:text-5xl drop-shadow-lg leading-tight font-['Karla']">
+                    SELAMAT DATANG DI
+                </h3>
+                <h1 class="text-5xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg leading-tight font-['Montserrat']">
+                    DESA KARANGASEM
+                </h1>
             </div>
             <div class="absolute inset-0 flex flex-col justify-center items-center text-white px-6 sm:px-10 md:px-16 lg:px-24 text-center -translate-y-6 sm:-translate-y-10">
             </div>
     </section>
 
-    <!-- Konten Profil -->
-    <section class="max-w-6xl mx-auto px-6 py-12">
+    <!-- Section Profil Desa dengan Carousel Gambar -->
+    <section class="container max-w-6xl mx-auto px-12 py-12 flex flex-col md:flex-row gap-8">
+        <!-- Bagian Carousel Gambar -->
+        <div class="relative w-full md:w-1/2 h-80  overflow-hidden rounded-lg shadow-lg">
+            <!-- Gambar Carousel -->
+            <div id="carousel" class="w-full h-full relative">
+                <img src="{{ asset('assets/images/gambar1.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-700" alt="Gambar 1">
+                <img src="{{ asset('assets/images/gambar2.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 2">
+                <img src="{{ asset('assets/images/gambar3.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 3">
+                <img src="{{ asset('assets/images/gambar4.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 4">
+                <img src="{{ asset('assets/images/gambar5.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 5">
+            </div>
+
+            <!-- Tombol Navigasi -->
+            <button id="prevBtn" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full hover:bg-green-600 transition">
+                &#10094;
+            </button>
+            <button id="nextBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full hover:bg-green-600 transition">
+                &#10095;
+            </button>
+
+            <!-- Indikator Bulatan -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+            </div>
+        </div>
+
+        <!-- Bagian Teks Profil Desa -->
+        <div class="md:w-1/2 md-">
+            <h2 class="text-3xl font-bold text-green-700 mb-4">Profil Desa Karangasem</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Desa Karangasem merupakan desa yang berada di wilayah Kecamatan Lumbang, Kabupaten Pasuruan, Jawa Timur.
+                Dengan luas wilayah secara keseluruhan 477 Hektar dan jumlah penduduk 1997 jiwa. Rata-rata penduduknya bekerja
+                sebagai petani. Desa Karangasem memiliki potensi alam yang melimpah dan masyarakat yang ramah dan memiliki
+                sikap toleransi antar umat beragama serta budaya yang masih kental.
+            </p>
+        </div>
+    </section>
+
+    <script>
+        const images = document.querySelectorAll('#carousel img');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        let current = 0;
+
+        function showImage(index) {
+            images.forEach((img, i) => {
+                img.classList.remove('opacity-100');
+                img.classList.add('opacity-0');
+                dots[i].classList.remove('opacity-100', 'scale-110');
+                dots[i].classList.add('opacity-50');
+            });
+            images[index].classList.remove('opacity-0');
+            images[index].classList.add('opacity-100');
+            dots[index].classList.remove('opacity-50');
+            dots[index].classList.add('opacity-100', 'scale-110');
+        }
+
+        function nextImage() {
+            current = (current + 1) % images.length;
+            showImage(current);
+        }
+
+        function prevImage() {
+            current = (current - 1 + images.length) % images.length;
+            showImage(current);
+        }
+
+        nextBtn.addEventListener('click', nextImage);
+        prevBtn.addEventListener('click', prevImage);
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                current = index;
+                showImage(current);
+            });
+        });
+
+        // Ganti gambar otomatis setiap 5 detik
+        setInterval(nextImage, 5000);
+
+        showImage(current);
+    </script>
+
+    <!-- Section Visi dan Misi -->
+    <section class="max-w-6xl mx-auto px-12 py-6">
         <div class="flex flex-col md:flex-row md:space-x-12">
+
             <!-- Visi -->
             <div class="md:w-1/2">
                 <h2 class="text-2xl font-semibold text-green-700 mb-4">Visi</h2>
-                <p class="text-gray-700 leading-relaxed text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus.
+                <p class="text-gray-700 leading-relaxed text-justify font-['archivo']">
+                    Terwujudnya Desa Karangasem yang Maju, Transparan, dan Berdaya Saing melalui Tata Kelola Pemerintahan yang Baik
+                    serta Pemberdayaan Masyarakat yang Partisipatif dan Berkelanjutan.
                 </p>
             </div>
 
             <!-- Misi -->
             <div class="md:w-1/2 mt-8 md:mt-0">
                 <h2 class="text-2xl font-semibold text-green-700 mb-4">Misi</h2>
-                <ul class="list-disc pl-5 space-y-3">
+                <ul class="list-disc pl-5 space-y-3 font-['archivo']">
                     <li class="text-gray-700 leading-relaxed text-justify text-indent:-1em pl-[1em]">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus omnis optio,
-                        tenetur deleniti illum qui natus blanditiis.
+                        Menciptakan tata kelola pemerintahan yang baik (good governance) berdasarkan demokratisasi,
+                        transparansi, partisipatif, akuntabilitas dan mengutamakan pelayanan kepada masyarakat.
                     </li>
                     <li class="text-gray-700 leading-relaxed text-justify text-indent:-1em pl-[1em]">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Meningkatkan sistem Perencanaan Pembangunan Desa yang partisipatif dengan menekankan pada
+                        konsepsi DOUM (Dari, Oleh dan Untuk Masyarakat).
                     </li>
                     <li class="text-gray-700 leading-relaxed text-justify text-indent:-1em pl-[1em]">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Transparansi Informasi Penyelenggaraan
+                        Pembangunan Desa (IPPD).
                     </li>
                     <li class="text-gray-700 leading-relaxed text-justify text-indent:-1em pl-[1em]">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Meningkatkan pembangunan infrastruktur Desa secara berkesinambungan berdasarkan skala
+                        prioritas dan pembidangan.
+                    </li>
+                    <li class="text-gray-700 leading-relaxed text-justify text-indent:-1em pl-[1em]">
+                        Meningkatkan pembangunan dibidang ilmu pengetahuan untuk mendorong peningkatan kualitas
+                        sumber daya manusia agar memiliki kecerdasan dan daya saing yang lebih baik.
                     </li>
                 </ul>
             </div>

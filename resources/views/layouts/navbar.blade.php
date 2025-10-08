@@ -7,6 +7,8 @@
     <title>Profil Desa Karangasem</title>
     @vite('resources/css/app.css')
     <script src="//unpkg.com/alpinejs" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital@0;1&family=Karla:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+
 </head>
 
 <body class="bg-gray-50 text-gray-800">
@@ -32,7 +34,7 @@
                     </a>
                     <a href="#" class="hover:text-green-600">Berita</a>
                     <a href="#" class="hover:text-green-600">Pengajuan Surat</a>
-                    <a href="{{ url('/admin') }}" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-900 transition">
+                    <a href="{{ url('/admin') }}" class="bg-green-600 text-white font-bold px-4 py-2 rounded-md hover:bg-green-900 transition">
                         Admin
                     </a>
                 </div>
@@ -64,11 +66,19 @@
             x-transition:leave-end="opacity-0 -translate-y-4"
             class="md:hidden bg-white/90 backdrop-blur-lg border-t border-gray-200">
             <div class="flex flex-col items-center py-4 space-y-3">
-                <a href="{{ route('profil-desa') }}" class="text-green-700 hover:text-green-900 font-semibold">Profil Desa</a>
-                <a href="#" class="hover:text-green-600 hover:font-semibold">Struktur Pemerintahan Desa</a>
-                <a href="#" class="hover:text-green-600 hover:font-semibold">Berita</a>
-                <a href="#" class="hover:text-green-600 hover:font-semibold">Pengajuan Surat</a>
-                <a href="{{ url('/admin') }}" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">
+                <a href="{{ route('profil-desa') }}"
+                    @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('profil-desa'),
+                    ])>
+                    Profil Desa
+                </a>
+                <a href="{{ route('struktur-pemerintahan') }}"
+                    @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('struktur-pemerintahan'),
+                    ])>
+                    Struktur Pemerintahan Desa
+                </a>
+                <a href="#" class="hover:text-green-600">Berita</a>
+                <a href="#" class="hover:text-green-600">Pengajuan Surat</a>
+                <a href="{{ url('/admin') }}" class="bg-green-600 text-white font-bold px-4 py-2 rounded-md hover:bg-green-900 transition">
                     Admin
                 </a>
             </div>

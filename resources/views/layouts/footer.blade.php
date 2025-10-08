@@ -14,10 +14,9 @@
         </div>
         <!-- Bagian kanan: Informasi Kontak -->
         <div class="flex flex-col justify-center">
-            <h3 class="text-2xl font-semibold mb-3">Desa Karangasem</h3>
-            <p class="text-gray-100 mb-4 leading-relaxed">
-                Desa Karangasem, Kecamatan Lumbang, Kabupaten Pasuruan, Jawa Timur.<br>
-                Hubungi kami untuk informasi lebih lanjut mengenai layanan desa dan pengajuan surat online.
+            <h3 class="text-2xl font-semibold mb-3">DESA KARANGASEM</h3>
+            <p class="text-gray-100 mb-4 leading-relaxed font-['archivo']">
+                Jl. Dusun Krajan, Desa Karangasem, Kecamatan Lumbang, Kabupaten Pasuruan, Kode Pos 67185
             </p>
             <p class="text-sm text-gray-300 mt-auto">
                 &copy; 2025 Desa Karangasem. Dilindungi Hak Cipta.
