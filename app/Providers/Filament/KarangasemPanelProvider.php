@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\View\ViewServiceProvider;
 
 class KarangasemPanelProvider extends PanelProvider
 {
@@ -51,6 +52,10 @@ class KarangasemPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->renderHook(
+                'panels::auth.login.form.after',
+                fn() => view('filamen.custom.tombol-kembali')
+            );
     }
 }

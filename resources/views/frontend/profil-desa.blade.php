@@ -123,7 +123,7 @@
                 <h2 class="text-2xl font-semibold text-green-700 mb-4">Visi</h2>
                 <p class="text-gray-700 leading-relaxed text-justify font-['archivo']">
                     Terwujudnya Desa Karangasem yang Maju, Transparan, dan Berdaya Saing melalui Tata Kelola Pemerintahan yang Baik
-                    serta Pemberdayaan Masyarakat yang Partisipatif dan Berkelanjutan.
+                    serta Pemberdayaan Masyarakat yang Agamis, Partisipatif, dan Berkelanjutan.
                 </p>
             </div>
 
