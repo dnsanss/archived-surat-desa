@@ -3,31 +3,22 @@
 namespace App\Filament\Resources\DataWargas;
 
 use BackedEnum;
-use Livewire\Form;
 use App\Models\DataWarga;
 use Filament\Tables\Table;
 use Filament\Schemas\Schema;
-use Filament\Actions\BulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
-use Filament\Actions\DeleteAction;
 use Filament\Support\Icons\Heroicon;
-use function Laravel\Prompts\select;
 use Filament\Forms\Components\Select;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Support\Collection;
 use App\Filament\Resources\DataWargas\Pages\EditDataWarga;
 use App\Filament\Resources\DataWargas\Pages\ListDataWargas;
 use App\Filament\Resources\DataWargas\Pages\CreateDataWarga;
-
-use App\Filament\Resources\DataWargas\Schemas\DataWargaForm;
-use App\Filament\Resources\DataWargas\Tables\DataWargasTable;
 
 class DataWargaResource extends Resource
 {
@@ -62,7 +53,22 @@ class DataWargaResource extends Resource
 
             DatePicker::make('tanggal_lahir')
                 ->label('Tanggal Lahir')
-                ->required(),
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(function ($state, callable $set) {
+                    if ($state) {
+                        $umur = \Carbon\Carbon::parse($state)->age;
+                        $set('umur', $umur);
+                    } else {
+                        $set('umur', null);
+                    }
+                }),
+
+            TextInput::make('umur')
+                ->label('Umur')
+                ->disabled()
+                ->dehydrated(true)
+                ->numeric(),
 
             Select::make('jenis_kelamin')
                 ->label('Jenis Kelamin')
@@ -145,6 +151,22 @@ class DataWargaResource extends Resource
                 ])
                 ->required(),
 
+            Select::make('pendidikan')
+                ->label('Pendidikan')
+                ->options([
+                    'SD' => 'SD',
+                    'SMP' => 'SMP',
+                    'SMA' => 'SMA',
+                    'Diploma 1' => 'Diploma 1',
+                    'Diploma 2' => 'Diploma 2',
+                    'Diploma 3' => 'Diploma 3',
+                    'Diploma 4' => 'Diploma 4',
+                    'Sarjana' => 'Sarjana',
+                    'Magister' => 'Magister',
+                    'Doktor' => 'Doktor',
+                ])
+                ->required(),
+
             Select::make('status_perkawinan')
                 ->label('Status Perkawinan')
                 ->options([
@@ -176,6 +198,10 @@ class DataWargaResource extends Resource
                     ->label('Nama')
                     ->searchable(),
 
+                TextColumn::make('umur')
+                    ->label('Umur')
+                    ->searchable(),
+
                 TextColumn::make('jenis_kelamin')
                     ->label('Jenis Kelamin'),
 
@@ -194,6 +220,28 @@ class DataWargaResource extends Resource
                         'L' => 'Laki-laki',
                         'P' => 'Perempuan',
                     ]),
+                SelectFilter::make('umur')
+                    ->label('Umur')
+                    ->options([
+                        '0-17' => '0-17',
+                        '18-30' => '18-30',
+                        '31-45' => '31-45',
+                        '46-60' => '46-60',
+                        '61+' => '61+',
+                    ])
+                    ->query(function ($query, $value) {
+                        if ($value === '0-17') {
+                            $query->where('umur', '<=', 17);
+                        } elseif ($value === '18-30') {
+                            $query->whereBetween('umur', [18, 30]);
+                        } elseif ($value === '31-45') {
+                            $query->whereBetween('umur', [31, 45]);
+                        } elseif ($value === '46-60') {
+                            $query->whereBetween('umur', [46, 60]);
+                        } elseif ($value === '61+') {
+                            $query->where('umur', '>=', 61);
+                        }
+                    }),
                 SelectFilter::make('agama')
                     ->label('Agama')
                     ->options([
@@ -220,6 +268,20 @@ class DataWargaResource extends Resource
                         'Kawin' => 'Kawin',
                         'Cerai Hidup' => 'Cerai Hidup',
                         'Cerai Mati' => 'Cerai Mati',
+                    ]),
+                SelectFilter::make('pendidikan')
+                    ->label('Pendidikan')
+                    ->options([
+                        'SD' => 'SD',
+                        'SMP' => 'SMP',
+                        'SMA' => 'SMA',
+                        'Diploma 1' => 'Diploma 1',
+                        'Diploma 2' => 'Diploma 2',
+                        'Diploma 3' => 'Diploma 3',
+                        'Diploma 4' => 'Diploma 4',
+                        'Sarjana' => 'Sarjana',
+                        'Magister' => 'Magister',
+                        'Doktor' => 'Doktor',
                     ]),
             ])
             ->defaultSort('nama', 'asc')

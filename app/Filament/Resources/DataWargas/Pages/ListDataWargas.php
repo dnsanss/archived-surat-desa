@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\DataWargas\Pages;
 
+use Filament\Actions\BulkAction;
 use Filament\Actions\CreateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\DataWargas\DataWargaResource;
-use Filament\Actions\BulkAction;
+use App\Filament\Resources\DataWargas\Widgets\DataWargaStatsOverview;
 
 class ListDataWargas extends ListRecords
 {
@@ -20,6 +21,13 @@ class ListDataWargas extends ListRecords
     {
         return [
             CreateAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            DataWargaStatsOverview::class,
         ];
     }
 }

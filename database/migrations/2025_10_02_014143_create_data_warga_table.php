@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
+            $table->integer('umur')->nullable();
             $table->string('jenis_kelamin');
             $table->text('alamat');
             $table->string('rt', 3)->nullable();
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->string('kelurahan');
             $table->string('kecamatan');
             $table->string('agama');
+            $table->string('pendidikan')->nullable();
             $table->string('status_perkawinan');
             $table->string('pekerjaan')->nullable();
             $table->string('kewarganegaraan')->default('WNI'); // default WNI
@@ -36,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_wargas');
+        Schema::dropIfExists('data_warga');
     }
 };
