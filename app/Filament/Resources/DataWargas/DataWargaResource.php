@@ -19,6 +19,7 @@ use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\DataWargas\Pages\EditDataWarga;
 use App\Filament\Resources\DataWargas\Pages\ListDataWargas;
 use App\Filament\Resources\DataWargas\Pages\CreateDataWarga;
+use Filament\Tables\Filters\Filter;
 
 class DataWargaResource extends Resource
 {
@@ -203,87 +204,184 @@ class DataWargaResource extends Resource
                     ->searchable(),
 
                 TextColumn::make('jenis_kelamin')
-                    ->label('Jenis Kelamin'),
+                    ->label('Jenis Kelamin')
+                    ->searchable(),
 
                 TextColumn::make('alamat')
                     ->label('Alamat')
-                    ->limit(30),
+                    ->limit(30)
+                    ->searchable(),
 
                 TextColumn::make('pekerjaan')
                     ->label('Pekerjaan')
-                    ->limit(20),
+                    ->limit(20)
+                    ->searchable(),
             ])
             ->filters([
-                SelectFilter::make('jenis_kelamin')
-                    ->label('Jenis Kelamin')
-                    ->options([
-                        'L' => 'Laki-laki',
-                        'P' => 'Perempuan',
-                    ]),
-                SelectFilter::make('umur')
-                    ->label('Umur')
-                    ->options([
-                        '0-17' => '0-17',
-                        '18-30' => '18-30',
-                        '31-45' => '31-45',
-                        '46-60' => '46-60',
-                        '61+' => '61+',
+                Filter::make('custom_filter')
+                    ->form([
+                        Select::make('column')
+                            ->label('Pilih Kolom')
+                            ->options([
+                                'agama' => 'Agama',
+                                'jenis_kelamin' => 'Jenis Kelamin',
+                                'pendidikan' => 'Pendidikan',
+                                'umur' => 'Umur',
+                                'alamat' => 'Alamat',
+                                'status_perkawinan' => 'Status Perkawinan',
+                            ])
+                            ->reactive(),
+
+                        // Jika kolom umur dipilih, tampilkan opsi perbandingan (>, <, =)
+                        Select::make('operator')
+                            ->label('Perbandingan Umur')
+                            ->options([
+                                '>' => 'Lebih dari',
+                                '<' => 'Kurang dari',
+                                '=' => 'Sama dengan',
+                            ])
+                            ->visible(fn($get) => $get('column') === 'umur')
+                            ->reactive(),
+
+                        // Field nilai filter (dinamis: dropdown atau input angka)
+                        Select::make('value')
+                            ->label('Pilih Nilai')
+                            ->options(function (callable $get) {
+                                return match ($get('column')) {
+                                    'agama' => [
+                                        'Islam' => 'Islam',
+                                        'Kristen' => 'Kristen',
+                                        'Katolik' => 'Katolik',
+                                        'Hindu' => 'Hindu',
+                                        'Budha' => 'Budha',
+                                        'Konghucu' => 'Konghucu',
+                                    ],
+                                    'jenis_kelamin' => [
+                                        'L' => 'Laki-Laki',
+                                        'P' => 'Perempuan',
+                                    ],
+                                    'pendidikan' => [
+                                        'SD' => 'SD',
+                                        'SMP' => 'SMP',
+                                        'SMA' => 'SMA',
+                                        'Diploma' => 'Diploma',
+                                        'Sarjana' => 'Sarjana',
+                                        'Magister' => 'Magister',
+                                        'Doktor' => 'Doktor',
+                                    ],
+                                    'status_perkawinan' => [
+                                        'Belum Kawin' => 'Belum Kawin',
+                                        'Kawin' => 'Kawin',
+                                        'Cerai Hidup' => 'Cerai Hidup',
+                                        'Cerai Mati' => 'Cerai Mati',
+                                    ],
+                                    'alamat' => [
+                                        'Krajan' => 'Krajan',
+                                        'Karanganyar Barat' => 'Karanganyar Barat',
+                                        'Karanganyar Timur' => 'Karanganyar Timur',
+                                        'Karanganyar Tengah' => 'Karanganyar Tengah',
+                                        'Karanganyar Kidul' => 'Karanganyar Kidul',
+                                    ],
+                                    default => [],
+                                };
+                            })
+                            ->visible(fn($get) => filled($get('column')) && $get('column') !== 'umur')
+                            ->reactive(),
+
+                        // Input umur khusus (muncul kalau kolom umur dipilih)
+                        TextInput::make('umur_value')
+                            ->label('Masukkan Umur')
+                            ->numeric()
+                            ->visible(fn($get) => $get('column') === 'umur'),
                     ])
-                    ->query(function ($query, $value) {
-                        if ($value === '0-17') {
-                            $query->where('umur', '<=', 17);
-                        } elseif ($value === '18-30') {
-                            $query->whereBetween('umur', [18, 30]);
-                        } elseif ($value === '31-45') {
-                            $query->whereBetween('umur', [31, 45]);
-                        } elseif ($value === '46-60') {
-                            $query->whereBetween('umur', [46, 60]);
-                        } elseif ($value === '61+') {
-                            $query->where('umur', '>=', 61);
+                    ->query(function ($query, array $data) {
+                        if (! $data['column']) return $query;
+
+                        // Logika filter umur (numerik)
+                        if ($data['column'] === 'umur') {
+                            if (!empty($data['operator']) && isset($data['umur_value'])) {
+                                return $query->where('umur', $data['operator'], $data['umur_value']);
+                            }
+                            return $query;
                         }
+
+                        // Logika filter biasa (teks/enum)
+                        if (!empty($data['value'])) {
+                            return $query->where($data['column'], $data['value']);
+                        }
+
+                        return $query;
                     }),
-                SelectFilter::make('agama')
-                    ->label('Agama')
-                    ->options([
-                        'Islam' => 'Islam',
-                        'Kristen' => 'Kristen',
-                        'Katolik' => 'Katolik',
-                        'Hindu' => 'Hindu',
-                        'Buddha' => 'Buddha',
-                        'Konghucu' => 'Konghucu',
-                    ]),
-                SelectFilter::make('alamat')
-                    ->label('Alamat')
-                    ->options([
-                        'Krajan' => 'Krajan',
-                        'Karanganyar Barat' => 'Karanganyar Barat',
-                        'Karanganyar Timur' => 'Karanganyar Timur',
-                        'Karanganyar Tengah' => 'Karanganyar Tengah',
-                        'Karanganyar Kidul' => 'Karanganyar Kidul',
-                    ]),
-                SelectFilter::make('status_perkawinan')
-                    ->label('Status Perkawinan')
-                    ->options([
-                        'Belum Kawin' => 'Belum Kawin',
-                        'Kawin' => 'Kawin',
-                        'Cerai Hidup' => 'Cerai Hidup',
-                        'Cerai Mati' => 'Cerai Mati',
-                    ]),
-                SelectFilter::make('pendidikan')
-                    ->label('Pendidikan')
-                    ->options([
-                        'SD' => 'SD',
-                        'SMP' => 'SMP',
-                        'SMA' => 'SMA',
-                        'Diploma 1' => 'Diploma 1',
-                        'Diploma 2' => 'Diploma 2',
-                        'Diploma 3' => 'Diploma 3',
-                        'Diploma 4' => 'Diploma 4',
-                        'Sarjana' => 'Sarjana',
-                        'Magister' => 'Magister',
-                        'Doktor' => 'Doktor',
-                    ]),
             ])
+            // SelectFilter::make('jenis_kelamin')
+            //     ->label('Jenis Kelamin')
+            //     ->options([
+            //         'L' => 'Laki-laki',
+            //         'P' => 'Perempuan',
+            //     ]),
+            // SelectFilter::make('umur')
+            //     ->label('Umur')
+            //     ->options([
+            //         '0-17' => '0-17',
+            //         '18-30' => '18-30',
+            //         '31-45' => '31-45',
+            //         '46-60' => '46-60',
+            //         '61+' => '61+',
+            //     ])
+            //     ->query(function ($query, $value) {
+            //         if ($value === '0-17') {
+            //             $query->where('umur', '<=', 17);
+            //         } elseif ($value === '18-30') {
+            //             $query->whereBetween('umur', [18, 30]);
+            //         } elseif ($value === '31-45') {
+            //             $query->whereBetween('umur', [31, 45]);
+            //         } elseif ($value === '46-60') {
+            //             $query->whereBetween('umur', [46, 60]);
+            //         } elseif ($value === '61+') {
+            //             $query->where('umur', '>=', 61);
+            //         }
+            //     }),
+            // SelectFilter::make('agama')
+            //     ->label('Agama')
+            //     ->options([
+            //         'Islam' => 'Islam',
+            //         'Kristen' => 'Kristen',
+            //         'Katolik' => 'Katolik',
+            //         'Hindu' => 'Hindu',
+            //         'Buddha' => 'Buddha',
+            //         'Konghucu' => 'Konghucu',
+            //     ]),
+            // SelectFilter::make('alamat')
+            //     ->label('Alamat')
+            //     ->options([
+            //         'Krajan' => 'Krajan',
+            //         'Karanganyar Barat' => 'Karanganyar Barat',
+            //         'Karanganyar Timur' => 'Karanganyar Timur',
+            //         'Karanganyar Tengah' => 'Karanganyar Tengah',
+            //         'Karanganyar Kidul' => 'Karanganyar Kidul',
+            //     ]),
+            // SelectFilter::make('status_perkawinan')
+            //     ->label('Status Perkawinan')
+            //     ->options([
+            //         'Belum Kawin' => 'Belum Kawin',
+            //         'Kawin' => 'Kawin',
+            //         'Cerai Hidup' => 'Cerai Hidup',
+            //         'Cerai Mati' => 'Cerai Mati',
+            //     ]),
+            // SelectFilter::make('pendidikan')
+            //     ->label('Pendidikan')
+            //     ->options([
+            //         'SD' => 'SD',
+            //         'SMP' => 'SMP',
+            //         'SMA' => 'SMA',
+            //         'Diploma 1' => 'Diploma 1',
+            //         'Diploma 2' => 'Diploma 2',
+            //         'Diploma 3' => 'Diploma 3',
+            //         'Diploma 4' => 'Diploma 4',
+            //         'Sarjana' => 'Sarjana',
+            //         'Magister' => 'Magister',
+            //         'Doktor' => 'Doktor',
+            //     ]),
             ->defaultSort('nama', 'asc')
             ->recordActions([
                 ViewAction::make(),
