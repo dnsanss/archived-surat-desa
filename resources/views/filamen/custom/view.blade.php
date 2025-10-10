@@ -3,6 +3,7 @@
         <div class="mb-4">
             <h2 class="text-lg font-bold">Nomor Surat: {{ $record->nomor_surat }}</h2>
             <h2 class="text-gray-600">Nama Surat: {{ $record->nama_surat }}</h2>
+            <h2 class="text-gray-600">Perihal: {{ $record->perihal }}</h2>
         </div>
 
         @if(Str::endsWith($record->dokumen, '.pdf'))

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nomor_surat')->unique();
             $table->string('nama_surat');
+            $table->string('perihal');
             $table->string('dokumen');
             $table->timestamps();
         });

@@ -12,6 +12,7 @@ class ArsipSurat extends Model
     protected $fillable = [
         'nomor_surat',
         'nama_surat',
+        'perihal',
         'dokumen'
     ];
     protected static function boot()

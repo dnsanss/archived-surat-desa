@@ -48,6 +48,10 @@ class ArsipSuratResource extends Resource
                 ->label('Nama Surat')
                 ->required(),
 
+            TextInput::make('perihal')
+                ->label('Perihal')
+                ->required(),
+
             FileUpload::make('dokumen')
                 ->label('Upload Dokumen')
                 ->disk('local')
@@ -71,6 +75,7 @@ class ArsipSuratResource extends Resource
             ->columns([
                 TextColumn::make('nomor_surat')->searchable(),
                 TextColumn::make('nama_surat')->searchable(),
+                TextColumn::make('perihal')->searchable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime('d M Y H:i'),
