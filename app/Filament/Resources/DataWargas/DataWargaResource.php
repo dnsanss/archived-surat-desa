@@ -219,7 +219,7 @@ class DataWargaResource extends Resource
             ])
             ->filters([
                 Filter::make('custom_filter')
-                    ->form([
+                    ->schema([
                         Select::make('column')
                             ->label('Pilih Kolom')
                             ->options([
