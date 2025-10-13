@@ -121,7 +121,7 @@
             <!-- Visi -->
             <div class="md:w-1/2">
                 <h2 class="text-2xl font-semibold text-green-700 mb-4">Visi</h2>
-                <p class="text-gray-700 leading-relaxed text-justify font-['archivo']">
+                <p class="text-gray-700 leading-relaxed text-justify">
                     Terwujudnya Desa Karangasem yang Maju, Transparan, dan Berdaya Saing melalui Tata Kelola Pemerintahan yang Baik
                     serta Pemberdayaan Masyarakat yang Agamis, Partisipatif, dan Berkelanjutan.
                 </p>
@@ -130,7 +130,7 @@
             <!-- Misi -->
             <div class="md:w-1/2 mt-8 md:mt-0">
                 <h2 class="text-2xl font-semibold text-green-700 mb-4">Misi</h2>
-                <ul class="list-disc pl-5 space-y-3 font-['archivo']">
+                <ul class="list-disc pl-5 space-y-3">
                     <li class="text-gray-700 leading-relaxed text-justify text-indent:-1em pl-[1em]">
                         Menciptakan tata kelola pemerintahan yang baik (good governance) berdasarkan demokratisasi,
                         transparansi, partisipatif, akuntabilitas dan mengutamakan pelayanan kepada masyarakat.

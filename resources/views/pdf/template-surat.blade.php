@@ -6,7 +6,7 @@
     <title>{{ $nama_template }}</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 40px;
         }
 
@@ -31,7 +31,7 @@
         <hr>
     </div>
 
-    {!! $isi_surat !!}
+    {!! $isi_template !!}
 
     <div style="margin-top:50px; text-align:right;">
         <p>Karangasem, {{ now()->translatedFormat('d F Y') }}</p>

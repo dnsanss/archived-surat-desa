@@ -22,16 +22,16 @@ class ProsesSuratController extends Controller
         }
 
         // Ganti placeholder di template dengan data sebenarnya
-        $isi_surat = $template->isi_template;
-        $isi_surat = str_replace(
+        $isi_template = $template->isi_template;
+        $isi_template = str_replace(
             ['{{nama}}', '{{nik}}', '{{alamat}}', '{{tempat_lahir}}', '{{tanggal_lahir}}', '{{jenis_kelamin}}'],
             [$warga->nama, $warga->nik, $warga->alamat, $warga->tempat_lahir, $warga->tanggal_lahir, $warga->jenis_kelamin],
-            $isi_surat
+            $isi_template
         );
 
         $pdf = Pdf::loadView('pdf.template-surat', [
             'nama_template' => $template->nama_template,
-            'isi_surat' => $isi_surat,
+            'isi_template' => $isi_template,
         ]);
 
         $fileName = 'surat_' . $warga->nik . '_' . now()->format('YmdHis') . '.pdf';
