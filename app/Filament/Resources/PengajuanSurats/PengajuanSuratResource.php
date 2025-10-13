@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PengajuanSurats;
 
 use BackedEnum;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 use App\Models\PengajuanSurat;
 use Filament\Actions\EditAction;
@@ -88,8 +89,15 @@ class PengajuanSuratResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->recordActions([
                 ViewAction::make(),
+                Action::make('proses')
+                    ->label('Proses Surat')
+                    ->icon('heroicon-o-document-check')
+                    ->color('success')
+                    ->url(fn($record) => route('admin.proses-surat', $record))
+                    ->openUrlInNewTab(),
                 EditAction::make(),
                 DeleteAction::make(),
+
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),

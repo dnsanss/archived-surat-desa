@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\ProsesSuratController;
 use App\Http\Controllers\PengajuanSuratController;
 
 // import controller pengajuan surat
@@ -34,3 +35,9 @@ Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->nam
 
 // route untuk halaman sukses pengajuan surat
 Route::get('/pengajuan-surat/sukses', [PengajuanSuratController::class, 'sukses'])->name('pengajuan-surat.sukses');
+
+// route untuk halaman proses surat (admin)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/proses-surat/{id}', [ProsesSuratController::class, 'generate'])
+        ->name('admin.proses-surat');
+});
