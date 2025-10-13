@@ -2,13 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\PengajuanSuratController;
 
+// import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
 
+// route untuk halaman struktur pemerintahan
 Route::get('/struktur-pemerintahan', function () {
     return view('frontend.struktur-pemerintahan');
 })->name('struktur-pemerintahan');
 
+// route untuk melihat arsip surat
 Route::get('/arsip/view/{filename}', function ($filename) {
     $path = storage_path('app/arsip-surat/' . $filename);
 
@@ -21,3 +25,12 @@ Route::get('/arsip/view/{filename}', function ($filename) {
         'Content-Type' => $mimeType,
     ]);
 })->name('arsip.view')->middleware('auth');
+
+// import controller pengajuan surat
+Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'index'])->name('pengajuan-surat');
+
+// route untuk menyimpan pengajuan surat
+Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->name('pengajuan-surat.store');
+
+// route untuk halaman sukses pengajuan surat
+Route::get('/pengajuan-surat/sukses', [PengajuanSuratController::class, 'sukses'])->name('pengajuan-surat.sukses');

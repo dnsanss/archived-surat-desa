@@ -33,7 +33,11 @@
                         Struktur Pemerintahan Desa
                     </a>
                     <a href="#" class="hover:text-green-600">Berita</a>
-                    <a href="#" class="hover:text-green-600">Pengajuan Surat</a>
+                    <a href="{{ route('pengajuan-surat') }}"
+                        @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('pengajuan-surat'),
+                        ])>
+                        Pengajuan Surat
+                    </a>
                     <a href="{{ url('/admin') }}" class="bg-green-600 text-white font-bold px-4 py-2 rounded-md hover:bg-green-900 transition">
                         Admin
                     </a>
@@ -77,7 +81,11 @@
                     Struktur Pemerintahan Desa
                 </a>
                 <a href="#" class="hover:text-green-600">Berita</a>
-                <a href="#" class="hover:text-green-600">Pengajuan Surat</a>
+                <a href="{{ route('pengajuan-surat') }}"
+                    @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('pengajuan-surat'),
+                    ])>
+                    Pengajuan Surat
+                </a>
                 <a href="{{ url('/admin') }}" class="bg-green-600 text-white font-bold px-4 py-2 rounded-md hover:bg-green-900 transition">
                     Admin
                 </a>
