@@ -1,3 +1,4 @@
+<!-- tampilan detail pada menu arsip surat -->
 <x-filament::page>
     <div class="space-y-6">
         <div class="mb-4">

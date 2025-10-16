@@ -25,14 +25,16 @@ class DataWargaResource extends Resource
 {
     protected static ?string $model = DataWarga::class;
 
+    //icon sidebar
     protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
 
+    //memanggil fungsi untuk menampilkan total warga, jumlah laki-laki, jumlah perempuan dari folder DataWargas/Widgets
     public static function getNavigationLabel(): string
     {
         return 'Data Warga';
     }
 
-
+    //menu input
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
@@ -186,7 +188,7 @@ class DataWargaResource extends Resource
         ]);
     }
 
-
+    //menampilkan data di tabel
     public static function table(Table $table): Table
     {
         return $table
@@ -324,6 +326,7 @@ class DataWargaResource extends Resource
                     ->label('Hapus Terpilih')
                     ->successNotificationTitle('Data warga terpilih berhasil dihapus.'),
             ])
+            //untuk menonaktifkan klik pada baris tabel agar tidak membuka halaman detail
             ->recordUrl(fn() => null)
             ->recordAction(null);
     }

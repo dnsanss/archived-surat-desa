@@ -24,8 +24,10 @@ class ArsipSuratResource extends Resource
 {
     protected static ?string $model = ArsipSurat::class;
 
+    //icon sidebar
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentArrowUp;
 
+    //label sidebar
     public static function getNavigationLabel(): string
     {
         return 'Arsip Surat';
@@ -36,6 +38,7 @@ class ArsipSuratResource extends Resource
     //     return static::$navigationGroup = 'Data Surat';
     // }
 
+    //menu input
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
@@ -69,6 +72,7 @@ class ArsipSuratResource extends Resource
         ]);
     }
 
+    //menampilkan data di tabel
     public static function table(Table $table): Table
     {
         return $table

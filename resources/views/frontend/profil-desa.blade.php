@@ -1,3 +1,5 @@
+<!-- halaman profil desa -->
+
 @include('layouts.navbar')
 <!-- Hero Section -->
 {{-- SECTION: Hero Profil Desa --}}

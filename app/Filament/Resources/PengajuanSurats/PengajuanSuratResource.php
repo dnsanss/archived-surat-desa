@@ -27,10 +27,14 @@ class PengajuanSuratResource extends Resource
 {
     protected static ?string $model = PengajuanSurat::class;
 
+    //icon sidebar
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Inbox;
+
+    //label sidebar
     protected static ?string $navigationLabel = 'Pengajuan Surat Warga';
     protected static ?string $pluralLabel = 'Pengajuan Surat Warga';
 
+    //menu input
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -69,6 +73,8 @@ class PengajuanSuratResource extends Resource
             ]);
     }
 
+
+    //menampilkan data di tabel
     public static function table(Table $table): Table
     {
         return $table

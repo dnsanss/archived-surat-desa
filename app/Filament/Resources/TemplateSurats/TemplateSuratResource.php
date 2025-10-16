@@ -27,13 +27,17 @@ class TemplateSuratResource extends Resource
 {
     protected static ?string $model = TemplateSurat::class;
 
+    // icon sidebar
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    // label sidebar
     protected static ?string $navigationLabel = 'Template Surat';
     protected static ?string $pluralLabel = 'Template Surat';
 
-
+    // title halaman
     protected static ?string $recordTitleAttribute = 'Template Surat';
 
+    //menu input
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -61,6 +65,7 @@ class TemplateSuratResource extends Resource
             ]);
     }
 
+    //menu tabel
     public static function table(Table $table): Table
     {
         return $table

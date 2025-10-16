@@ -1,3 +1,5 @@
+<!-- halaman form pengajuan surat -->
+
 @include('layouts.navbar')
 <div class="max-w-150 mx-auto mt-28 px-6 py-10 bg-white shadow-md rounded-lg p-6">
     <h1 class="text-2xl font-bold text-center mb-6">Form Pengajuan Surat</h1>

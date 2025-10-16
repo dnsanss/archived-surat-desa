@@ -17,6 +17,7 @@ class ListDataWargas extends ListRecords
 
     protected static string $resource = DataWargaResource::class;
 
+    //menampilkan tombol tambah data
     protected function getHeaderActions(): array
     {
         return [
@@ -24,6 +25,7 @@ class ListDataWargas extends ListRecords
         ];
     }
 
+    //menampilkan widget di atas tabel
     protected function getHeaderWidgets(): array
     {
         return [

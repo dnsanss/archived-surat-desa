@@ -1,3 +1,5 @@
+<!-- halaman struktur pemerintahan desa -->
+
 @include('layouts.navbar')
 <section class="pt-24 pb-16 bg-gray-50 min-h-screen">
     <div class="max-w-6xl mx-auto px-6">

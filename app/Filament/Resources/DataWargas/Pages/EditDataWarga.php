@@ -10,6 +10,7 @@ class EditDataWarga extends EditRecord
 {
     protected static string $resource = DataWargaResource::class;
 
+    //setelah mengedit data, diarahkan ke halaman list data warga
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
