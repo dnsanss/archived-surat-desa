@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surat_terbit', function (Blueprint $table) {
+        Schema::create('berita', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pengajuan_id')->constrained('pengajuan_surat')->cascadeOnDelete();
-            $table->string('nomor_surat');
-            $table->string('file_pdf');
-            $table->date('tanggal_terbit');
-            $table->string('qrcode_path')->nullable();
+            $table->string('judul', 150);
+            $table->longText('isi');
+            $table->text('gambar')->nullable();
+            $table->date('tanggal_publikasi')->nullable();
+            $table->string('penulis', 100)->default('Admin Desa Karangasem');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('surat_terbit');
+        Schema::dropIfExists('berita');
     }
 };
