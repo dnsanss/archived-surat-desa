@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ArsipSurat extends Model
 {
-    protected $table = 'arsip_surat';
+    protected $table = 'surat_masuk';
 
     protected $fillable = [
         'nomor_surat',

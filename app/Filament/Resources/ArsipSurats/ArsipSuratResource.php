@@ -25,14 +25,16 @@ class ArsipSuratResource extends Resource
     protected static ?string $model = ArsipSurat::class;
 
     //icon sidebar
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentArrowUp;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentArrowDown;
 
     //label sidebar
     public static function getNavigationLabel(): string
     {
-        return 'Arsip Surat';
+        return 'Surat Masuk';
     }
-
+    protected static ?string $navigationLabel = 'Surat Masuk';
+    protected static ?string $pluralLabel = 'Surat Masuk';
+    protected static ?string $recordTitleAttribute = 'Surat Keluar';
     // public static function getNavigationGroup(): string|UnitEnum|null
     // {
     //     return static::$navigationGroup = 'Data Surat';

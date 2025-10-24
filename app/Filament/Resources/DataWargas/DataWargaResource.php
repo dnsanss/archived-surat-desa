@@ -33,6 +33,9 @@ class DataWargaResource extends Resource
     {
         return 'Data Warga';
     }
+    protected static ?string $navigationLabel = 'Data Warga';
+    protected static ?string $pluralLabel = 'Data Warga';
+    protected static ?string $recordTitleAttribute = 'Data Warga';
 
     //menu input
     public static function form(Schema $schema): Schema

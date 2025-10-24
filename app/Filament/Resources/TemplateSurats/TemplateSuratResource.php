@@ -29,7 +29,7 @@ class TemplateSuratResource extends Resource
     protected static ?string $model = TemplateSurat::class;
 
     // icon sidebar
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentDuplicate;
 
     // label sidebar
     protected static ?string $navigationLabel = 'Template Surat';
@@ -108,7 +108,6 @@ class TemplateSuratResource extends Resource
             'index' => ListTemplateSurats::route('/'),
             'create' => CreateTemplateSurat::route('/create'),
             'edit' => EditTemplateSurat::route('/{record}/edit'),
-            'view' => EditTemplateSurat::route('/{record}/view'),
         ];
     }
 }
