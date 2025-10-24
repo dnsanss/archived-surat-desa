@@ -22,6 +22,9 @@ use App\Filament\Resources\PengajuanSurats\Pages\ListPengajuanSurats;
 use App\Filament\Resources\PengajuanSurats\Pages\CreatePengajuanSurat;
 use App\Filament\Resources\PengajuanSurats\Schemas\PengajuanSuratForm;
 use App\Filament\Resources\PengajuanSurats\Tables\PengajuanSuratsTable;
+use Dom\Text;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Support\Facades\Date;
 
 class PengajuanSuratResource extends Resource
 {
@@ -42,19 +45,32 @@ class PengajuanSuratResource extends Resource
                 TextInput::make('nik')
                     ->label('NIK')
                     ->required()
-                    ->length(16)
-                    ->disabledOn('edit'),
+                    ->length(16),
 
                 TextInput::make('nama')
                     ->label('Nama Lengkap')
-                    ->required()
-                    ->disabledOn('edit'),
+                    ->required(),
 
                 Select::make('template_id')
                     ->label('Jenis Surat')
                     ->relationship('template', 'nama_template')
-                    ->required()
-                    ->disabledOn('edit'),
+                    ->required(),
+
+                TextInput::make('nomor_surat')
+                    ->label('Nomor Surat')
+                    ->default(fn($record) => $record?->template?->kode_nomor_surat ?? '')
+                    ->disabled(fn($record) => $record?->status === 'selesai')
+                    ->dehydrated(true)
+                    ->required(),
+
+                TextInput::make('kepada')
+                    ->label('Kepada')
+                    ->required(),
+
+                DatePicker::make('tanggal_pengajuan')
+                    ->label('Tanggal Pengajuan')
+                    ->default(now())
+                    ->required(),
 
                 Textarea::make('catatan')
                     ->label('Catatan Tambahan')
@@ -81,18 +97,21 @@ class PengajuanSuratResource extends Resource
             ->columns([
                 TextColumn::make('nik')->label('NIK')->searchable(),
                 TextColumn::make('nama')->label('Nama Warga')->searchable(),
-                TextColumn::make('template.nama_template')->label('Jenis Surat')->sortable(),
+                TextColumn::make('template.nama_template')->label('Jenis Surat')->searchable(),
+                TextColumn::make('nomor_surat')->label('Nomor Surat')->searchable(),
                 TextColumn::make('status')->badge()
                     ->colors([
                         'warning' => 'menunggu',
                         'info' => 'diproses',
                         'success' => 'selesai',
-                    ]),
-                TextColumn::make('created_at')
+                    ])
+                    ->label('Status')->searchable(),
+                TextColumn::make('tanggal_pengajuan')
                     ->label('Tanggal Pengajuan')
-                    ->dateTime('d M Y, H:i'),
+                    ->dateTime('d M Y')
+                    ->searchable(),
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('tanggal_pengajuan', 'desc')
             ->recordActions([
                 ViewAction::make(),
                 Action::make('proses')

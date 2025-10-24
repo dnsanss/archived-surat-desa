@@ -21,7 +21,6 @@ class ProsesSuratController extends Controller
             abort(404, 'Data warga tidak ditemukan.');
         }
 
-        // Ganti placeholder di template dengan data sebenarnya
         $isi_template = $template->isi_template;
         $isi_template = str_replace(
             ['{{nama}}', '{{nik}}', '{{alamat}}', '{{tempat_lahir}}', '{{tanggal_lahir}}', '{{jenis_kelamin}}'],
@@ -41,10 +40,11 @@ class ProsesSuratController extends Controller
 
         // Simpan ke tabel surat_terbit
         SuratTerbit::create([
-            'pengajuan_id' => $pengajuan->id,
-            'nomor_surat' => 'SK-' . strtoupper(uniqid()),
-            'file_pdf' => $filePath,
-            'tanggal_terbit' => now(),
+            'pengajuan_id'   => $pengajuan->id,
+            'nomor_surat'    => $pengajuan->nomor_surat,
+            'kepada'         => $pengajuan->kepada,
+            'file_pdf'       => $filePath,
+            'tanggal_pengajuan' => now()->setTimezone('Asia/Jakarta'),
         ]);
 
         // Ubah status pengajuan menjadi selesai

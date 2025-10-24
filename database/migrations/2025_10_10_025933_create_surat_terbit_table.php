@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pengajuan_id')->constrained('pengajuan_surat')->cascadeOnDelete();
             $table->string('nomor_surat');
+            $table->string('kepada');
             $table->string('file_pdf');
-            $table->date('tanggal_terbit');
+            $table->date('tanggal_pengajuan');
             $table->string('qrcode_path')->nullable();
             $table->timestamps();
         });

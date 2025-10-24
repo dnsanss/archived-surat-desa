@@ -22,6 +22,7 @@ use App\Filament\Resources\TemplateSurats\Pages\ListTemplateSurats;
 use App\Filament\Resources\TemplateSurats\Pages\CreateTemplateSurat;
 use App\Filament\Resources\TemplateSurats\Schemas\TemplateSuratForm;
 use App\Filament\Resources\TemplateSurats\Tables\TemplateSuratsTable;
+use Dom\Text;
 
 class TemplateSuratResource extends Resource
 {
@@ -62,6 +63,10 @@ class TemplateSuratResource extends Resource
                     ])
                     ->columnSpanFull()
                     ->required(),
+                TextInput::make('nomor_surat')
+                    ->label('Nomor Surat')
+                    ->required()
+                    ->maxLength(100),
             ]);
     }
 
@@ -72,11 +77,13 @@ class TemplateSuratResource extends Resource
             ->columns([
                 TextColumn::make('nama_template')
                     ->label('Nama Template')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
-                    ->dateTime('d M Y, H:i'),
+                    ->dateTime('d M Y'),
+                TextColumn::make('nomor_surat')
+                    ->label('Nomor Surat')
+                    ->searchable(),
             ])
             ->recordActions([
                 ViewAction::make(),
