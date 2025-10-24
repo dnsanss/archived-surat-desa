@@ -14,8 +14,10 @@ class SuratTerbit extends Model
     protected $fillable = [
         'pengajuan_id',
         'nomor_surat',
+        'kepada',
         'file_pdf',
-        'tanggal_terbit',
+        'tanggal_pengajuan',
+        'qrcode_path',
     ];
 
     public function pengajuan()

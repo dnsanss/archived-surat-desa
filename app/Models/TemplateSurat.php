@@ -14,5 +14,11 @@ class TemplateSurat extends Model
     protected $fillable = [
         'nama_template',
         'isi_template',
+        'nomor_surat',
     ];
+
+    public function pengajuan()
+    {
+        return $this->hasMany(PengajuanSurat::class, 'template_id');
+    }
 }

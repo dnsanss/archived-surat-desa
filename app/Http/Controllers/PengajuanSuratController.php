@@ -36,11 +36,12 @@ class PengajuanSuratController extends Controller
         }
 
         // ✅ Simpan pengajuan surat ke database
+        $template = TemplateSurat::find($validated['template_id']);
         PengajuanSurat::create([
             'nik' => $validated['nik'],
             'nama' => $validated['nama'],
             'template_id' => $validated['template_id'],
-            'catatan' => $validated['catatan'],
+            'nomor_surat' => $template?->nomor_surat ?? '-', // ← otomatis isi dari template
             'status' => 'menunggu',
         ]);
 

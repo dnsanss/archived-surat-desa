@@ -13,11 +13,20 @@ return new class extends Migration
     {
         Schema::create('berita', function (Blueprint $table) {
             $table->id();
+<<<<<<< HEAD:database/migrations/2025_10_10_025933_create_surat_terbit_table.php
+            $table->foreignId('pengajuan_id')->constrained('pengajuan_surat')->cascadeOnDelete();
+            $table->string('nomor_surat');
+            $table->string('kepada');
+            $table->string('file_pdf');
+            $table->date('tanggal_pengajuan');
+            $table->string('qrcode_path')->nullable();
+=======
             $table->string('judul', 150);
             $table->longText('isi');
             $table->text('gambar')->nullable();
             $table->date('tanggal_publikasi')->nullable();
             $table->string('penulis', 100)->default('Admin Desa Karangasem');
+>>>>>>> main:database/migrations/2025_10_22_041311_create_berita_table.php
             $table->timestamps();
         });
     }

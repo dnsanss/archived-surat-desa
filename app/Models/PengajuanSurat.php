@@ -15,6 +15,9 @@ class PengajuanSurat extends Model
         'nik',
         'nama',
         'template_id',
+        'nomor_surat',
+        'kepada',
+        'tanggal_pengajuan',
         'catatan',
         'status',
     ];
