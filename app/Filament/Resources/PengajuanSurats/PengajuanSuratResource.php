@@ -31,7 +31,7 @@ class PengajuanSuratResource extends Resource
     protected static ?string $model = PengajuanSurat::class;
 
     //icon sidebar
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Inbox;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
     //label sidebar
     protected static ?string $navigationLabel = 'Pengajuan Surat Warga';

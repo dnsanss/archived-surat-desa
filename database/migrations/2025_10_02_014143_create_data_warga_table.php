@@ -13,20 +13,22 @@ return new class extends Migration
     {
         Schema::create('data_warga', function (Blueprint $table) {
             $table->id();
-            $table->char('nik', 16)->unique();
-            $table->string('nama_lengkap', 100);
-            $table->string('tempat_lahir', 50)->nullable();
-            $table->date('tanggal_lahir')->nullable();
-            $table->enum('jenis_kelamin', ['L', 'P'])->nullable();
-            $table->string('rt', 5)->nullable();
-            $table->string('rw', 5)->nullable();
-            $table->string('dusun', 100)->nullable();
-            $table->string('kelurahan', 100)->nullable();
-            $table->string('kecamatan', 100)->nullable();
-            $table->string('agama', 50)->nullable();
-            $table->string('status_perkawinan', 50)->nullable();
-            $table->string('pekerjaan', 100)->nullable();
-            $table->string('pendidikan', 50)->nullable(); // default WNI
+            $table->string('nik', 16)->unique();
+            $table->string('nama');
+            $table->string('tempat_lahir');
+            $table->date('tanggal_lahir');
+            $table->integer('umur')->nullable();
+            $table->string('jenis_kelamin');
+            $table->text('alamat');
+            $table->string('rt', 3)->nullable();
+            $table->string('rw', 3)->nullable();
+            $table->string('kelurahan');
+            $table->string('kecamatan');
+            $table->string('agama');
+            $table->string('pendidikan')->nullable();
+            $table->string('status_perkawinan');
+            $table->string('pekerjaan')->nullable();
+            $table->string('kewarganegaraan')->default('WNI'); // default WNI
             $table->timestamps();
         });
     }

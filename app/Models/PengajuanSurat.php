@@ -26,4 +26,9 @@ class PengajuanSurat extends Model
     {
         return $this->belongsTo(TemplateSurat::class, 'template_id');
     }
+
+    public function suratTerbit()
+    {
+        return $this->hasOne(SuratTerbit::class, 'pengajuan_id');
+    }
 }

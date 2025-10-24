@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('templates_surat', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_template', 100);
+            $table->string('nama_template');
             $table->longText('isi_template');
             $table->string('nomor_surat');
-            $table->string('format_file', 10)->default('PDF');
-            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }
