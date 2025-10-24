@@ -15,12 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nama_template', 100);
             $table->longText('isi_template');
-<<<<<<< HEAD
             $table->string('nomor_surat');
-=======
             $table->string('format_file', 10)->default('PDF');
             $table->text('keterangan')->nullable();
->>>>>>> main
             $table->timestamps();
         });
     }
