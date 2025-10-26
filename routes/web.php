@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProsesSuratController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\BeritaController;
 
 // import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
@@ -12,6 +13,10 @@ Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('pro
 Route::get('/struktur-pemerintahan', function () {
     return view('frontend.struktur-pemerintahan');
 })->name('struktur-pemerintahan');
+
+// Halaman Berita 
+Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
+Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.judul');
 
 // route untuk melihat arsip surat
 Route::get('/arsip/view/{filename}', function ($filename) {

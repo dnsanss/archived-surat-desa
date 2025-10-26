@@ -32,7 +32,13 @@
                         ])>
                         Struktur Pemerintahan Desa
                     </a>
-                    <a href="#" class="hover:text-green-600">Berita</a>
+                    <a href="{{ route('berita') }}"
+                    @class([
+                        'hover:text-green-600',
+                        'text-green-700 border-b-2' => request()->routeIs('berita'),
+                    ])>
+                    Berita
+                </a>
                     <a href="{{ route('pengajuan-surat') }}"
                         @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('pengajuan-surat'),
                         ])>
@@ -80,7 +86,14 @@
                     ])>
                     Struktur Pemerintahan Desa
                 </a>
-                <a href="#" class="hover:text-green-600">Berita</a>
+                <a href="{{ route('berita') }}"
+                @class([
+                    'hover:text-green-600',
+                    'text-green-700 border-b-2' => request()->routeIs('berita'),
+                ])>
+                Berita
+            </a>
+                </a>
                 <a href="{{ route('pengajuan-surat') }}"
                     @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('pengajuan-surat'),
                     ])>
