@@ -12,7 +12,7 @@ class BeritaController extends Controller
      */
     public function index()
     {
-        // Ambil semua data berita dari database, urutkan dari terbaru
+        // Ambil semua data berita dari database
         $beritas = Berita::orderBy('tanggal_publikasi', 'desc')->get();
 
         // Kirim data berita ke view frontend.berita
@@ -20,19 +20,19 @@ class BeritaController extends Controller
     }
 
     /**
-     * Menampilkan detail satu berita berdasarkan ID atau slug (opsional).
+     * Menampilkan detail satu berita berdasarkan ID.
      */
     public function show($id)
     {
-        // Ambil satu berita berdasarkan ID
+        // berita berdasarkan ID
         $berita = Berita::findOrFail($id);
 
-        // Tampilkan halaman detail berita
+        // Kirim ke view detail berita
         return view('frontend.detail-berita', compact('berita'));
     }
 
     /**
-     * Tambahkan fungsi untuk membuat berita dari dashboard admin.
+     * membuat berita
      */
     public function create()
     {

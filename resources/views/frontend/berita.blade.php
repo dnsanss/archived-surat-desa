@@ -1,30 +1,58 @@
 @include('layouts.navbar')
 
 <div class="max-w-150 mx-auto mt-28 px-6 py-10 bg-white shadow-md rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-center mb-6">Halaman Berita Desa</h1>
+    <h1 class="text-2xl font-bold text-center mb-6">Berita Desa</h1>
 
-    <p class="text-center mb-6">Selamat datang di halaman berita desa. Berikut adalah informasi dan kabar terbaru dari desa kami.</p>
-
-    {{-- Contoh daftar berita --}}
-    <div class="space-y-6">
-        <div class="border-b pb-4">
-            <h2 class="text-xl font-semibold mb-2">Gotong Royong Pembersihan Lingkungan</h2>
-            <p class="text-gray-600 text-sm mb-2">Tanggal: 20 Oktober 2025</p>
-            <p class="text-justify">Warga desa melaksanakan kegiatan gotong royong membersihkan area sekitar balai desa dan jalan utama. Kegiatan ini rutin dilakukan setiap bulan.</p>
+    {{-- Pesan sukses jika ada --}}
+    @if (session('success'))
+        <div class="bg-green-100 text-green-800 p-3 mb-4 rounded">
+            {{ session('success') }}
         </div>
+    @endif
 
-        <div class="border-b pb-4">
-            <h2 class="text-xl font-semibold mb-2">Pelatihan Digital untuk UMKM Desa</h2>
-            <p class="text-gray-600 text-sm mb-2">Tanggal: 18 Oktober 2025</p>
-            <p class="text-justify">Pemerintah desa mengadakan pelatihan digital untuk para pelaku UMKM agar dapat memasarkan produk secara online melalui media sosial dan marketplace.</p>
-        </div>
+    {{-- Jika tidak ada berita --}}
+    @if ($beritas->isEmpty())
+        <p class="text-center text-gray-600">Belum ada berita yang dipublikasikan.</p>
+    @else
+        {{-- Daftar berita --}}
+        <div class="space-y-6">
+            @foreach ($beritas as $berita)
+                <div class="border rounded-lg shadow-sm hover:shadow-md transition p-4">
+                    {{-- Gambar berita --}}
+                    @if ($berita->gambar)
+                        <img src="{{ asset('storage/' . $berita->gambar) }}" 
+                             alt="{{ $berita->judul }}" 
+                             class="w-full h-64 object-cover rounded-lg mb-4">
+                    @endif
 
-        <div>
-            <h2 class="text-xl font-semibold mb-2">Peringatan Hari Jadi Desa</h2>
-            <p class="text-gray-600 text-sm mb-2">Tanggal: 10 Oktober 2025</p>
-            <p class="text-justify">Warga merayakan hari jadi desa dengan acara kesenian, lomba, dan pagelaran budaya yang diikuti seluruh lapisan masyarakat.</p>
+                    {{-- Judul berita --}}
+                    <h2 class="text-xl font-semibold mb-2 text-gray-800">
+                        <a href="{{ route('berita.judul', $berita->id) }}" 
+                           class="hover:text-blue-600 transition">
+                            {{ $berita->judul }}
+                        </a>
+                    </h2>
+
+                    {{-- Info tambahan --}}
+                    <p class="text-sm text-gray-500 mb-2">
+                        Dipublikasikan pada {{ \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d M Y') }}
+                        oleh <span class="font-medium">{{ $berita->penulis }}</span>
+                    </p>
+
+                    {{-- Cuplikan isi berita --}}
+                    <p class="text-gray-700 mb-3">
+                        {{ Str::limit(strip_tags($berita->isi), 150, '...') }}
+                    </p>
+
+                    {{-- Tombol Baca Selengkapnya --}}
+                    <a href="{{ route('berita.judul', $berita->id) }}" 
+                       class="text-blue-600 hover:text-blue-800 font-semibold">
+                        Baca Selengkapnya →
+                    </a>
+                </div>
+            @endforeach
         </div>
-    </div>
+    @endif
 </div>
 
 @include('layouts.footer')
