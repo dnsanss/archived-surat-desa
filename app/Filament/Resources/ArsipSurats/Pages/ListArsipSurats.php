@@ -9,7 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListArsipSurats extends ListRecords
 {
 
-    protected static ?string $title = 'Arsip Surat';
+    protected static ?string $title = 'Surat Masuk';
 
     protected static string $resource = ArsipSuratResource::class;
 

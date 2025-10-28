@@ -92,7 +92,9 @@ class TemplateSuratResource extends Resource
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),
-            ]);
+            ])
+            ->recordUrl(fn() => null)
+            ->recordAction(null);
     }
 
     public static function getRelations(): array

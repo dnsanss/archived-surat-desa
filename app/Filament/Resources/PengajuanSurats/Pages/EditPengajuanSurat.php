@@ -10,10 +10,8 @@ class EditPengajuanSurat extends EditRecord
 {
     protected static string $resource = PengajuanSuratResource::class;
 
-    protected function getHeaderActions(): array
+    protected function getRedirectUrl(): string
     {
-        return [
-            DeleteAction::make(),
-        ];
+        return $this->getResource()::getUrl('index');
     }
 }

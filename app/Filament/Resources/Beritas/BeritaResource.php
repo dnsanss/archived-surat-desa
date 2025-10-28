@@ -33,10 +33,6 @@ class BeritaResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Berita';
     protected static ?string $navigationLabel = 'Berita Desa';
-    public static function getNavigationLabel(): string
-    {
-        return 'Berita Desa';
-    }
     protected static ?string $pluralLabel = 'Berita Desa';
 
     // Form Schema

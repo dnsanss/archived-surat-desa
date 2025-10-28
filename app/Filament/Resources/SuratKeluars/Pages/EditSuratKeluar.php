@@ -10,10 +10,8 @@ class EditSuratKeluar extends EditRecord
 {
     protected static string $resource = SuratKeluarResource::class;
 
-    protected function getHeaderActions(): array
+    protected function getRedirectUrl(): string
     {
-        return [
-            DeleteAction::make(),
-        ];
+        return $this->getResource()::getUrl('index');
     }
 }

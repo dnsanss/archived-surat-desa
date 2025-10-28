@@ -8,4 +8,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTemplateSurat extends CreateRecord
 {
     protected static string $resource = TemplateSuratResource::class;
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

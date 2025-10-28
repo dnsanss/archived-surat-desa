@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SuratKeluars;
 
+use App\Filament\Resources\SuratKeluarResource\Pages\ViewSuratKeluar;
 use Dom\Text;
 use BackedEnum;
 use Filament\Tables\Table;
@@ -16,9 +17,8 @@ use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\SuratKeluars\Pages\EditSuratKeluar;
 use App\Filament\Resources\SuratKeluars\Pages\ListSuratKeluars;
 use App\Filament\Resources\SuratKeluars\Pages\CreateSuratKeluar;
-use App\Filament\Resources\SuratKeluars\Schemas\SuratKeluarForm;
-use App\Filament\Resources\SuratKeluars\Tables\SuratKeluarsTable;
 use Faker\Core\File;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use PhpParser\Comment\Doc;
@@ -30,10 +30,6 @@ class SuratKeluarResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentArrowUp;
 
     protected static ?string $recordTitleAttribute = 'Surat Keluar';
-    public static function getNavigationLabel(): string
-    {
-        return 'Surat Keluar';
-    }
     protected static ?string $navigationLabel = 'Surat Keluar';
     protected static ?string $pluralLabel = 'Surat Keluar';
 
@@ -70,6 +66,14 @@ class SuratKeluarResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('created_at')
+                    ->label('Status')
+                    ->badge()
+                    ->formatStateUsing(function ($state) {
+                        return now()->diffInMinutes($state) <= 5 ? 'Terbaru' : '';
+                    })
+                    ->color(fn($state) => now()->diffInMinutes($state) <= 5 ? 'success' : 'gray')
+                    ->alignCenter(),
                 TextColumn::make('pengajuan.nama')
                     ->label('Nama Pengaju')
                     ->searchable(),
@@ -81,15 +85,22 @@ class SuratKeluarResource extends Resource
                     ->searchable(),
                 TextColumn::make('tanggal_pengajuan')
                     ->label('Tanggal Pengajuan')
-                    ->date()
+                    ->dateTime('d M Y')
                     ->searchable(),
 
             ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn($record) => SuratKeluarResource::getUrl('view', ['record' => $record])),
                 EditAction::make(),
                 DeleteAction::make(),
-            ]);
+            ])
+            ->bulkActions([
+                DeleteBulkAction::make(),
+            ])
+            ->recordUrl(fn() => null)
+            ->recordAction(null);
     }
 
     public static function getRelations(): array
@@ -105,6 +116,7 @@ class SuratKeluarResource extends Resource
             'index' => ListSuratKeluars::route('/'),
             'create' => CreateSuratKeluar::route('/create'),
             'edit' => EditSuratKeluar::route('/{record}/edit'),
+            'view' => ViewSuratKeluar::route('/{record}'),
         ];
     }
 }
