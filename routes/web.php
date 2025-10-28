@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\Berita;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProsesSuratController;
 use App\Http\Controllers\PengajuanSuratController;
-use App\Http\Controllers\BeritaController;
-use App\Models\Berita;
 
 // import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
@@ -20,8 +20,8 @@ Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.judul');
 
 // route untuk melihat arsip surat
-Route::get('/arsip/view/{filename}', function ($filename) {
-    $path = storage_path('app/arsip-surat/' . $filename);
+Route::get('/surat-masuk/view/{filename}', function ($filename) {
+    $path = storage_path('app/surat-masuk/' . $filename);
 
     if (!file_exists($path)) {
         abort(404, 'File tidak ditemukan.');
@@ -31,7 +31,7 @@ Route::get('/arsip/view/{filename}', function ($filename) {
     return response()->file($path, [
         'Content-Type' => $mimeType,
     ]);
-})->name('arsip.view')->middleware('auth');
+})->name('surat-masuk.view')->middleware('auth');
 
 // import controller pengajuan surat
 Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'index'])->name('pengajuan-surat');
@@ -47,3 +47,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/proses-surat/{id}', [ProsesSuratController::class, 'generate'])
         ->name('admin.proses-surat');
 });
+
+// route untuk view dokumen di surat keluar
+Route::get('/surat-keluar/view/{filename}', function ($filename) {
+    $path = storage_path('app/surat-keluar/' . $filename);
+
+    if (!file_exists($path)) {
+        abort(404, 'File tidak ditemukan.');
+    }
+
+    $mimeType = mime_content_type($path);
+    return response()->file($path, [
+        'Content-Type' => $mimeType,
+    ]);
+})->name('surat-keluar.view')->middleware('auth');

@@ -28,13 +28,9 @@ class ArsipSuratResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentArrowDown;
 
     //label sidebar
-    public static function getNavigationLabel(): string
-    {
-        return 'Surat Masuk';
-    }
     protected static ?string $navigationLabel = 'Surat Masuk';
     protected static ?string $pluralLabel = 'Surat Masuk';
-    protected static ?string $recordTitleAttribute = 'Surat Keluar';
+    protected static ?string $recordTitleAttribute = 'Surat Masuk';
     // public static function getNavigationGroup(): string|UnitEnum|null
     // {
     //     return static::$navigationGroup = 'Data Surat';
@@ -60,7 +56,7 @@ class ArsipSuratResource extends Resource
             FileUpload::make('dokumen')
                 ->label('Upload Dokumen')
                 ->disk('local')
-                ->directory('arsip-surat')
+                ->directory('surat-masuk')
                 ->acceptedFileTypes([
                     'application/pdf',
                     'application/msword',
@@ -84,7 +80,7 @@ class ArsipSuratResource extends Resource
                 TextColumn::make('perihal')->searchable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat')
-                    ->dateTime('d M Y H:i'),
+                    ->dateTime('d M Y'),
             ])
             ->defaultSort('nomor_surat', 'asc')
             ->recordActions([

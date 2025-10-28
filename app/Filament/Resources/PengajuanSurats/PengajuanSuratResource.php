@@ -17,21 +17,18 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\PengajuanSurats\Pages\EditPengajuanSurat;
 use App\Filament\Resources\PengajuanSurats\Pages\ListPengajuanSurats;
 use App\Filament\Resources\PengajuanSurats\Pages\CreatePengajuanSurat;
-use App\Filament\Resources\PengajuanSurats\Schemas\PengajuanSuratForm;
-use App\Filament\Resources\PengajuanSurats\Tables\PengajuanSuratsTable;
-use Dom\Text;
-use Filament\Forms\Components\DatePicker;
-use Illuminate\Support\Facades\Date;
 
 class PengajuanSuratResource extends Resource
 {
     protected static ?string $model = PengajuanSurat::class;
 
     //icon sidebar
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentText;
 
     //label sidebar
     protected static ?string $navigationLabel = 'Pengajuan Surat Warga';
@@ -95,10 +92,6 @@ class PengajuanSuratResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nik')->label('NIK')->searchable(),
-                TextColumn::make('nama')->label('Nama Warga')->searchable(),
-                TextColumn::make('template.nama_template')->label('Jenis Surat')->searchable(),
-                TextColumn::make('nomor_surat')->label('Nomor Surat')->searchable(),
                 TextColumn::make('status')->badge()
                     ->colors([
                         'warning' => 'menunggu',
@@ -106,19 +99,36 @@ class PengajuanSuratResource extends Resource
                         'success' => 'selesai',
                     ])
                     ->label('Status')->searchable(),
+                TextColumn::make('nik')->label('NIK')->searchable(),
+                TextColumn::make('nama')->label('Nama Warga')->searchable(),
+                TextColumn::make('template.nama_template')->label('Jenis Surat')->searchable(),
+                TextColumn::make('nomor_surat')->label('Nomor Surat')->searchable(),
                 TextColumn::make('tanggal_pengajuan')
                     ->label('Tanggal Pengajuan')
                     ->dateTime('d M Y')
+                    ->sortable()
                     ->searchable(),
             ])
-            ->defaultSort('tanggal_pengajuan', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 ViewAction::make(),
                 Action::make('proses')
                     ->label('Proses Surat')
                     ->icon('heroicon-o-document-check')
                     ->color('success')
-                    ->url(fn($record) => route('admin.proses-surat', $record))
+                    ->action(function ($record) {
+                        // Jalankan proses surat
+                        $controller = app(\App\Http\Controllers\ProsesSuratController::class);
+                        $controller->generate($record->id);
+
+                        Notification::make()
+                            ->title('Surat berhasil diproses!')
+                            ->success()
+                            ->send();
+
+                        // Redirect ke halaman surat keluar
+                        return redirect()->route('filament.karangasem.resources.surat-keluars.index');
+                    })
                     ->openUrlInNewTab(),
                 EditAction::make(),
                 DeleteAction::make(),
@@ -126,7 +136,9 @@ class PengajuanSuratResource extends Resource
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),
-            ]);
+            ])
+            ->recordUrl(fn() => null)
+            ->recordAction(null);
     }
 
     public static function getRelations(): array

@@ -22,7 +22,8 @@ class ViewArsipSurat extends ViewRecord
             Action::make('download')
                 ->label('Download Dokumen')
                 ->icon('heroicon-o-arrow-down-tray')
-                ->url(fn() => route('arsip.view', ['filename' => basename($this->record->dokumen)]))
+                ->color('success')
+                ->url(fn() => route('surat-masuk.view', ['filename' => basename($this->record->dokumen)]))
                 ->openUrlInNewTab(),
             Action::make('back')
                 ->label('Kembali')

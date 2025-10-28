@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SuratTerbit extends Model
 {
@@ -19,6 +20,15 @@ class SuratTerbit extends Model
         'tanggal_pengajuan',
         'qrcode_path',
     ];
+
+    protected static function booted()
+    {
+        static::deleting(function ($surat) {
+            if ($surat->file_pdf && Storage::disk('local')->exists($surat->file_pdf)) {
+                Storage::disk('local')->delete($surat->file_pdf);
+            }
+        });
+    }
 
     public function pengajuan()
     {
