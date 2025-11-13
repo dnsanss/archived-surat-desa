@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('kepada');
             $table->string('file_pdf');
             $table->date('tanggal_pengajuan');
-            $table->string('qrcode_path')->nullable();
+            $table->longText('qrcode_path')->nullable();
+            $table->string('qr_token', 100)->unique();
             $table->timestamps();
         });
     }

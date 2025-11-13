@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Berita;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProsesSuratController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\VerifikasiSuratController;
 
 // import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
@@ -61,3 +61,11 @@ Route::get('/surat-keluar/view/{filename}', function ($filename) {
         'Content-Type' => $mimeType,
     ]);
 })->name('surat-keluar.view')->middleware('auth');
+
+// route untuk verifikasi surat via QR Code
+Route::get('/verifikasi-surat/{token}', [VerifikasiSuratController::class, 'show'])
+    ->name('verifikasi.surat');
+
+// route untuk download dokumen di halaman verifikasi surat
+Route::get('/verifikasi-surat/{token}', [VerifikasiSuratController::class, 'show'])->name('verifikasi.surat');
+Route::get('/verifikasi-surat/download/{token}', [VerifikasiSuratController::class, 'download'])->name('verifikasi.download');
