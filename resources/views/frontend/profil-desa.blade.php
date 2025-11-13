@@ -14,15 +14,18 @@
             <div class="absolute inset-0 bg-black/25"></div>
 
             {{-- Teks di atas gambar --}}
-            <div class="absolute inset-0 flex flex-col justify-center items-center text-white px-6 sm:px-10 md:px-16 lg:px-24 text-center">
+            <div
+                class="absolute inset-0 flex flex-col justify-center items-center text-white px-6 sm:px-10 md:px-16 lg:px-24 text-center">
                 <h3 class="text-3xl sm:text-4xl md:text-5xl drop-shadow-lg leading-tight font-['Karla']">
                     SELAMAT DATANG DI
                 </h3>
-                <h1 class="text-5xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg leading-tight font-['Montserrat']">
+                <h1
+                    class="text-5xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg leading-tight font-['Montserrat']">
                     DESA KARANGASEM
                 </h1>
             </div>
-            <div class="absolute inset-0 flex flex-col justify-center items-center text-white px-6 sm:px-10 md:px-16 lg:px-24 text-center -translate-y-6 sm:-translate-y-10">
+            <div
+                class="absolute inset-0 flex flex-col justify-center items-center text-white px-6 sm:px-10 md:px-16 lg:px-24 text-center -translate-y-6 sm:-translate-y-10">
             </div>
     </section>
 
@@ -32,28 +35,45 @@
         <div class="relative w-full md:w-1/2 h-80  overflow-hidden rounded-lg shadow-lg">
             <!-- Gambar Carousel -->
             <div id="carousel" class="w-full h-full relative">
-                <img src="{{ asset('assets/images/gambar1.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-700" alt="Gambar 1">
-                <img src="{{ asset('assets/images/gambar2.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 2">
-                <img src="{{ asset('assets/images/gambar3.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 3">
-                <img src="{{ asset('assets/images/gambar4.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 4">
-                <img src="{{ asset('assets/images/gambar5.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700" alt="Gambar 5">
+                <img src="{{ asset('assets/images/gambar1.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-700"
+                    alt="Gambar 1">
+                <img src="{{ asset('assets/images/gambar2.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700"
+                    alt="Gambar 2">
+                <img src="{{ asset('assets/images/gambar3.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700"
+                    alt="Gambar 3">
+                <img src="{{ asset('assets/images/gambar4.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700"
+                    alt="Gambar 4">
+                <img src="{{ asset('assets/images/gambar5.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700"
+                    alt="Gambar 5">
             </div>
 
             <!-- Tombol Navigasi -->
-            <button id="prevBtn" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full hover:bg-green-600 transition">
+            <button id="prevBtn"
+                class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full hover:bg-green-600 transition">
                 &#10094;
             </button>
-            <button id="nextBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full hover:bg-green-600 transition">
+            <button id="nextBtn"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full hover:bg-green-600 transition">
                 &#10095;
             </button>
 
             <!-- Indikator Bulatan -->
             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
-                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
-                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
-                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
-                <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span
+                    class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span
+                    class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span
+                    class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span
+                    class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
+                <span
+                    class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer transition-all duration-300"></span>
             </div>
         </div>
 
@@ -62,7 +82,8 @@
             <h2 class="text-3xl font-bold text-green-700 mb-4">Profil Desa Karangasem</h2>
             <p class="text-gray-700 leading-relaxed">
                 Desa Karangasem merupakan desa yang berada di wilayah Kecamatan Lumbang, Kabupaten Pasuruan, Jawa Timur.
-                Dengan luas wilayah secara keseluruhan 477 Hektar dan jumlah penduduk 1997 jiwa. Rata-rata penduduknya bekerja
+                Dengan luas wilayah secara keseluruhan 477 Hektar dan jumlah penduduk 1997 jiwa. Rata-rata penduduknya
+                bekerja
                 sebagai petani. Desa Karangasem memiliki potensi alam yang melimpah dan masyarakat yang ramah dan memiliki
                 sikap toleransi antar umat beragama serta budaya yang masih kental.
             </p>
@@ -124,7 +145,8 @@
             <div class="md:w-1/2">
                 <h2 class="text-2xl font-semibold text-green-700 mb-4">Visi</h2>
                 <p class="text-gray-700 leading-relaxed text-justify">
-                    Terwujudnya Desa Karangasem yang Maju, Transparan, dan Berdaya Saing melalui Tata Kelola Pemerintahan yang Baik
+                    Terwujudnya Desa Karangasem yang Maju, Transparan, dan Berdaya Saing melalui Tata Kelola Pemerintahan yang
+                    Baik
                     serta Pemberdayaan Masyarakat yang Agamis, Partisipatif, dan Berkelanjutan.
                 </p>
             </div>
@@ -155,6 +177,35 @@
                     </li>
                 </ul>
             </div>
+        </div>
+    </section>
+
+    <!-- Section Berita Terkini -->
+    <section class="max-w-6xl mx-auto px-12 py-10">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-green-700">Berita Terkini</h2>
+            <a href="{{ route('berita') }}" class="text-green-600 hover:text-green-800 text-sm font-semibold">
+                Lihat Semua →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach ($berita_terbaru as $item)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition">
+                    <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}"
+                        class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-2">{{ $item->judul }}</h3>
+                        <p class="text-gray-500 text-sm mb-3">
+                            {{ \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') }}
+                        </p>
+                        <a href="{{ route('berita.judul', $item->id) }}"
+                            class="text-green-600 font-medium text-sm hover:underline">
+                            Baca Selengkapnya →
+                        </a>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </section>
 </div>
