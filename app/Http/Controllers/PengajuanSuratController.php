@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\DataWarga;
 use App\Models\TemplateSurat;
 use App\Models\PengajuanSurat;
+use App\Helpers\SuratHelper;
 
 class PengajuanSuratController extends Controller
 {
@@ -24,7 +25,7 @@ class PengajuanSuratController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        // ✅ Validasi warga menggunakan model DataWarga
+        // 🔹 Validasi warga
         $warga = DataWarga::where('nik', $validated['nik'])
             ->where('nama', 'LIKE', '%' . $validated['nama'] . '%')
             ->first();
@@ -35,13 +36,23 @@ class PengajuanSuratController extends Controller
             ])->withInput();
         }
 
-        // ✅ Simpan pengajuan surat ke database
-        $template = TemplateSurat::find($validated['template_id']);
+        // 🔹 Ambil template surat
+        $template = TemplateSurat::findOrFail($validated['template_id']);
+
+        // 🔹 Generate isi surat otomatis dari helper
+        $isiSurat = SuratHelper::replaceVariables(
+            $template->isi_template,
+            $warga
+        );
+
+        // 🔹 Simpan pengajuan surat
         PengajuanSurat::create([
             'nik' => $validated['nik'],
             'nama' => $validated['nama'],
             'template_id' => $validated['template_id'],
-            'nomor_surat' => $template?->nomor_surat ?? '-', // ← otomatis isi dari template
+            'nomor_surat' => $template?->nomor_surat ?? '-',
+            'isi_surat' => $isiSurat,   // ← MASUKKAN ISI SURAT DI SINI
+            'catatan' => $validated['catatan'] ?? null,
             'status' => 'menunggu',
         ]);
 

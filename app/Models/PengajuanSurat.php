@@ -16,6 +16,7 @@ class PengajuanSurat extends Model
         'nama',
         'template_id',
         'nomor_surat',
+        'isi_surat',
         'kepada',
         'tanggal_pengajuan',
         'catatan',

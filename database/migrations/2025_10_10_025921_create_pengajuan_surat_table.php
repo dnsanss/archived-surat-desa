@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nama');
             $table->foreignId('template_id')->constrained('templates_surat')->cascadeOnDelete();
             $table->string('nomor_surat')->nullable();
+            $table->longText('isi_surat')->nullable();
             $table->string('kepada')->nullable();
             $table->date('tanggal_pengajuan')->nullable();
             $table->text('catatan')->nullable();

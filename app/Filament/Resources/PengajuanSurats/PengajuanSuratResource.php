@@ -19,6 +19,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\PengajuanSurats\Pages\EditPengajuanSurat;
 use App\Filament\Resources\PengajuanSurats\Pages\ListPengajuanSurats;
 use App\Filament\Resources\PengajuanSurats\Pages\CreatePengajuanSurat;
@@ -51,6 +52,7 @@ class PengajuanSuratResource extends Resource
                 Select::make('template_id')
                     ->label('Jenis Surat')
                     ->relationship('template', 'nama_template')
+                    ->disabled()
                     ->required(),
 
                 TextInput::make('nomor_surat')
@@ -82,6 +84,22 @@ class PengajuanSuratResource extends Resource
                         'selesai' => 'Selesai',
                     ])
                     ->default('menunggu')
+                    ->required(),
+
+                RichEditor::make('isi_surat')
+                    ->label('Isi Surat')
+                    ->toolbarButtons([
+                        'bold',
+                        'italic',
+                        'underline',
+                        'strike',
+                        'bulletList',
+                        'orderedList',
+                        'link',
+                        'blockquote',
+                        'codeBlock',
+                    ])
+                    ->columnSpanFull()
                     ->required(),
             ]);
     }
