@@ -15,6 +15,7 @@ class TemplateSurat extends Model
         'nama_template',
         'isi_template',
         'nomor_surat',
+        'nama_ttd'
     ];
 
     public function pengajuan()

@@ -12,14 +12,15 @@ class PengajuanSurat extends Model
     protected $table = 'pengajuan_surat';
 
     protected $fillable = [
+        'warga_id',
         'nik',
         'nama',
         'template_id',
+        'nomor_wa',
         'nomor_surat',
         'isi_surat',
         'kepada',
         'tanggal_pengajuan',
-        'catatan',
         'status',
     ];
 

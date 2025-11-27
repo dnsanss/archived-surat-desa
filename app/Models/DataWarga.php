@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class DataWarga extends Model
+class DataWarga extends Authenticatable
 {
     protected $table = 'data_warga';
 

@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\WargaAuthController;
 use App\Http\Controllers\ProsesSuratController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\WargaPengajuanController;
 use App\Http\Controllers\VerifikasiSuratController;
 
 // import controller pengajuan surat
@@ -34,7 +36,7 @@ Route::get('/surat-masuk/view/{filename}', function ($filename) {
 })->name('surat-masuk.view')->middleware('auth');
 
 // import controller pengajuan surat
-Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'index'])->name('pengajuan-surat');
+Route::get('/pengajuan-surat', [FrontendController::class, 'pengajuanSurat'])->name('pengajuan-surat');
 
 // route untuk menyimpan pengajuan surat
 Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->name('pengajuan-surat.store');
@@ -69,3 +71,32 @@ Route::get('/verifikasi-surat/{token}', [VerifikasiSuratController::class, 'show
 // route untuk download dokumen di halaman verifikasi surat
 Route::get('/verifikasi-surat/{token}', [VerifikasiSuratController::class, 'show'])->name('verifikasi.surat');
 Route::get('/verifikasi-surat/download/{token}', [VerifikasiSuratController::class, 'download'])->name('verifikasi.download');
+
+// login warga
+Route::get('/login-warga', [WargaAuthController::class, 'showLoginForm'])
+    ->name('warga.login');
+
+Route::post('/login-warga', [WargaAuthController::class, 'login'])
+    ->name('warga.login.submit');
+
+Route::get('/logout-warga', [WargaAuthController::class, 'logout'])
+    ->name('warga.logout');
+
+// 3 fitur utama di pengajuan surat
+Route::middleware('warga')->group(function () {
+
+    // 🔹 1. Pengajuan surat
+    Route::get('/pengajuan-surat/form-pengajuan-surat', [WargaPengajuanController::class, 'form'])
+        ->name('form.pengajuan.surat');
+
+    Route::post('/pengajuan-surat/store', [WargaPengajuanController::class, 'store'])
+        ->name('pengajuan.store');
+
+    // 🔹 2. Lacak surat
+    Route::get('/pengajuan-surat/pelacakan-surat', [WargaPengajuanController::class, 'pelacakan'])
+        ->name('pelacakan.surat');
+
+    // 🔹 3. Penyimpanan surat
+    Route::get('/pengajuan-surat/penyimpanan-surat', [WargaPengajuanController::class, 'penyimpanan'])
+        ->name('penyimpanan.surat');
+});

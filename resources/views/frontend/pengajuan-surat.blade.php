@@ -1,54 +1,74 @@
-<!-- halaman form pengajuan surat -->
-
 @include('layouts.navbar')
-<div class="max-w-150 mx-auto mt-28 px-6 py-10 bg-white shadow-md rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-center mb-6">Form Pengajuan Surat</h1>
+<div class="container mt-5">
 
-    @if ($errors->any())
-    <div class="bg-red-100 text-red-800 p-3 mb-4 rounded">
-        <ul class="list-disc list-inside">
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+    {{-- CEK STATUS LOGIN --}}
+    @if (!session('warga_logged_in'))
+
+    {{-- Jika belum login --}}
+    <div class="text-center p-5 border rounded">
+        <h3>Anda belum masuk</h3>
+        <p>Silakan masuk terlebih dahulu untuk mengakses fitur pengajuan surat.</p>
+        <a href="{{ route('warga.login') }}" class="btn btn-primary">
+            Masuk Disini
+        </a>
+    </div>
+
+    @else
+    {{-- Jika sudah login --}}
+    <div class="text-center mb-4">
+        <h4>Selamat Datang, <strong>{{ session('warga_nama') }}</strong></h4>
+        <p>NIK: {{ session('warga_nik') }}</p>
+    </div>
+
+    <div class="row text-center">
+
+        {{-- Menu Pengajuan Surat --}}
+        <div class="col-md-4 mb-3">
+            <a href="{{ route('form.pengajuan.surat') }}" class="card p-4 shadow-sm text-decoration-none">
+                <h5>Pengajuan Surat</h5>
+                <p>Ajukan surat secara online</p>
+            </a>
+        </div>
+
+        {{-- Menu Pelacakan Surat --}}
+        <div class="col-md-4 mb-3">
+            <a href="{{ route('pelacakan.surat') }}" class="card p-4 shadow-sm text-decoration-none">
+                <h5>Pelacakan Surat</h5>
+                <p>Lihat status surat yang telah diajukan</p>
+            </a>
+        </div>
+
+        {{-- Menu Penyimpanan Surat --}}
+        <div class="col-md-4 mb-3">
+            <a href="{{ route('penyimpanan.surat') }}" class="card p-4 shadow-sm text-decoration-none">
+                <h5>Penyimpanan Surat</h5>
+                <p>Lihat semua surat yang telah selesai diproses</p>
+            </a>
+        </div>
+
     </div>
     @endif
 
-    <form method="POST" action="{{ route('pengajuan-surat.store') }}">
-        @csrf
+    {{-- FLASH MESSAGE --}}
+    @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
 
-        <div class="mb-4">
-            <label for="nik" class="block font-semibold">NIK</label>
-            <input type="text" name="nik" id="nik" value="{{ old('nik') }}"
-                class="w-full border rounded px-3 py-2" maxlength="16" required>
-        </div>
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
 
-        <div class="mb-4">
-            <label for="nama" class="block font-semibold">Nama Lengkap</label>
-            <input type="text" name="nama" id="nama" value="{{ old('nama') }}"
-                class="w-full border rounded px-3 py-2" required>
-        </div>
+    {{-- Tombol Logout --}}
+    <div class="text-center mt-4">
+        <a href="{{ route('warga.logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+    @endif
 
-        <div class="mb-4">
-            <label for="template_id" class="block font-semibold">Jenis Surat</label>
-            <select name="template_id" id="template_id" class="w-full border rounded px-3 py-2" required>
-                <option value="">-- Pilih Jenis Surat --</option>
-                @foreach ($templates as $template)
-                <option value="{{ $template->id }}">{{ $template->nama_template }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-4">
-            <label for="catatan" class="block font-semibold">Catatan Tambahan (opsional)</label>
-            <textarea name="catatan" id="catatan" rows="3"
-                class="w-full border rounded px-3 py-2">{{ old('catatan') }}</textarea>
-        </div>
-
-        <button type="submit"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-            Kirim Pengajuan
-        </button>
-    </form>
 </div>
 @include('layouts.footer')

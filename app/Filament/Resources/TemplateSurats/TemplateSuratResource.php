@@ -67,6 +67,9 @@ class TemplateSuratResource extends Resource
                     ->label('Nomor Surat')
                     ->required()
                     ->maxLength(100),
+                TextInput::make('nama_ttd')
+                    ->label('Nama Penandatangan Surat')
+                    ->required(),
             ]);
     }
 
