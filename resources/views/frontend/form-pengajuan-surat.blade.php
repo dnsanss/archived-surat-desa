@@ -65,7 +65,6 @@
             @endforeach
         </ul>
     </div>
-    @endif
 </div>
 
 @include('layouts.footer')
