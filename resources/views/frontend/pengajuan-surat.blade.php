@@ -17,7 +17,6 @@
     {{-- Jika sudah login --}}
     <div class="text-center mb-4">
         <h4>Selamat Datang, <strong>{{ session('warga_nama') }}</strong></h4>
-        <p>NIK: {{ session('warga_nik') }}</p>
     </div>
 
     <div class="row text-center">
@@ -68,7 +67,6 @@
     <div class="text-center mt-4">
         <a href="{{ route('warga.logout') }}" class="btn btn-danger">Logout</a>
     </div>
-    @endif
 
 </div>
 @include('layouts.footer')
