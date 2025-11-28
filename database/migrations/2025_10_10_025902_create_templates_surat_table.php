@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_template');
             $table->longText('isi_template');
             $table->string('nomor_surat');
+            $table->string('nama_ttd');
             $table->timestamps();
         });
     }

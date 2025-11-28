@@ -55,6 +55,11 @@ class PengajuanSuratResource extends Resource
                     ->disabled()
                     ->required(),
 
+                TextInput::make('nomor_wa')
+                    ->label('Nomor WhatsApp')
+                    ->tel()
+                    ->required(),
+
                 TextInput::make('nomor_surat')
                     ->label('Nomor Surat')
                     ->default(fn($record) => $record?->template?->kode_nomor_surat ?? '')
@@ -70,11 +75,6 @@ class PengajuanSuratResource extends Resource
                     ->label('Tanggal Pengajuan')
                     ->default(now())
                     ->required(),
-
-                Textarea::make('catatan')
-                    ->label('Catatan Tambahan')
-                    ->rows(3)
-                    ->nullable(),
 
                 Select::make('status')
                     ->label('Status')

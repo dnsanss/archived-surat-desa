@@ -9,7 +9,12 @@ class FrontendController extends Controller
 {
     public function profilDesa()
     {
-         $berita_terbaru = Berita::latest()->take(4)->get();
+        $berita_terbaru = Berita::latest()->take(4)->get();
         return view('frontend.profil-desa', compact('berita_terbaru'));
+    }
+
+    public function pengajuanSurat()
+    {
+        return view('frontend.pengajuan-surat');
     }
 }
