@@ -1,4 +1,20 @@
 @include('layouts.navbar')
+
+{{-- FLASH MESSAGE --}}
+@if (session('success'))
+<div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+    {{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+
 <div class="container mt-5">
 
     {{-- CEK STATUS LOGIN --}}
@@ -14,12 +30,12 @@
     </div>
 
     @else
-    {{-- Jika sudah login --}}
-    <div class="text-center mb-4">
-        <h4>Selamat Datang, <strong>{{ session('warga_nama') }}</strong></h4>
-    </div>
 
     <div class="row text-center">
+        {{-- Jika sudah login --}}
+        <div class="text-center mb-4">
+            <h4>Selamat Datang, <strong>{{ session('warga_nama') }}</strong></h4>
+        </div>
 
         {{-- Menu Pengajuan Surat --}}
         <div class="col-md-4 mb-3">
@@ -46,27 +62,12 @@
         </div>
 
     </div>
-    @endif
-
-    {{-- FLASH MESSAGE --}}
-    @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
 
     {{-- Tombol Logout --}}
     <div class="text-center mt-4">
         <a href="{{ route('warga.logout') }}" class="btn btn-danger">Logout</a>
     </div>
+    @endif
 
 </div>
 @include('layouts.footer')

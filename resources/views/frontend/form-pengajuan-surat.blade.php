@@ -5,7 +5,16 @@
 
     <div class="card shadow">
         <div class="card-body">
-
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Oops!</strong> Ada kesalahan pada input anda:
+                <ul class="mt-2 mb-0">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             <form action="{{ route('pengajuan.store') }}" method="POST">
                 @csrf
 
@@ -51,19 +60,8 @@
                 <button type="submit" class="btn btn-primary w-100">
                     Ajukan Surat
                 </button>
-
             </form>
-
         </div>
-    </div>
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Oops!</strong> Ada kesalahan pada input anda:
-        <ul class="mt-2 mb-0">
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
     </div>
 </div>
 

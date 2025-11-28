@@ -161,7 +161,7 @@
             </table>
 
             <!-- 🔹 Nama Penandatangan -->
-            <p class="nama-ttd" style="margin-top: 5px;">Sumali</p>
+            <p class="nama-ttd" style="margin-top: 5px;">{{ $nama_ttd }}</p>
         </div>
     </div>
 

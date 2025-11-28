@@ -48,7 +48,9 @@ class WargaAuthController extends Controller
         // SIMPAN SESSION LOGIN WARGA
         session([
             'warga_logged_in' => true,
-            'warga' => $warga, // object
+            'warga_nik' => $warga->nik,
+            'warga_nama' => $warga->nama,
+            'warga_id' => $warga->id, // object
         ]);
 
         return redirect()

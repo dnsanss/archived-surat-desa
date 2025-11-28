@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\DataWarga;
+use App\Helpers\SuratHelper;
+use Illuminate\Http\Request;
 use App\Models\TemplateSurat;
 use App\Models\PengajuanSurat;
 
@@ -35,6 +36,10 @@ class WargaPengajuanController extends Controller
 
         $warga = DataWarga::find(session('warga_id'));
         $template = TemplateSurat::find($request->template_id);
+        $isiSurat = SuratHelper::replaceVariables(
+            $template->isi_template,
+            $warga
+        );
 
         PengajuanSurat::create([
             'warga_id'      => $warga->id,
@@ -43,8 +48,8 @@ class WargaPengajuanController extends Controller
             'template_id'    => $template->id,
             'nomor_wa'      => $request->nomor_wa,
             'nomor_surat'    => $template->nomor_surat,
-            'kepada'         => null, // admin isi nanti
-            'isi_surat'      => null, // akan digenerate pertama kali saat admin buka
+            'isi_surat'      => $isiSurat,
+            'kepada'         => null, // akan digenerate pertama kali saat admin buka
             'status'         => 'menunggu',
             'tanggal_pengajuan' => now(),
         ]);
