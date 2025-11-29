@@ -36,13 +36,12 @@ Route::get('/surat-masuk/view/{filename}', function ($filename) {
 })->name('surat-masuk.view')->middleware('auth');
 
 // import controller pengajuan surat
-Route::get('/pengajuan-surat', [FrontendController::class, 'pengajuanSurat'])->name('pengajuan-surat');
-
-// route untuk menyimpan pengajuan surat
-Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->name('pengajuan-surat.store');
+Route::get('/pengajuan-surat', [FrontendController::class, 'pengajuanSurat'])
+    ->name('pengajuan-surat');
 
 // route untuk halaman sukses pengajuan surat
-Route::get('/pengajuan-surat/sukses', [PengajuanSuratController::class, 'sukses'])->name('pengajuan-surat.sukses');
+Route::get('/pengajuan-surat-sukses/{id}', [WargaPengajuanController::class, 'sukses'])
+    ->name('pengajuan-surat-sukses');
 
 // route untuk halaman proses surat (admin)
 Route::middleware(['auth'])->group(function () {

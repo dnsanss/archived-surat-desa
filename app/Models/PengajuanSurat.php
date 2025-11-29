@@ -24,7 +24,12 @@ class PengajuanSurat extends Model
         'status',
     ];
 
-    public function template()
+    protected $casts = [
+        'tanggal_pengajuan' => 'datetime',
+        'created_at' => 'datetime',
+    ];
+
+    public function templateSurat()
     {
         return $this->belongsTo(TemplateSurat::class, 'template_id');
     }

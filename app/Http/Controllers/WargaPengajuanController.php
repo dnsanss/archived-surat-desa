@@ -10,9 +10,7 @@ use App\Models\PengajuanSurat;
 
 class WargaPengajuanController extends Controller
 {
-    /**
-     * Form Pengajuan Surat
-     */
+    // Tampilkan form pengajuan surat
     public function form()
     {
         // Ambil data warga dari session
@@ -24,9 +22,7 @@ class WargaPengajuanController extends Controller
         return view('frontend.form-pengajuan-surat', compact('warga', 'templates'));
     }
 
-    /**
-     * Simpan Pengajuan Surat
-     */
+    // Proses penyimpanan pengajuan surat
     public function store(Request $request)
     {
         $request->validate([
@@ -41,7 +37,7 @@ class WargaPengajuanController extends Controller
             $warga
         );
 
-        PengajuanSurat::create([
+        $pengajuan = PengajuanSurat::create([
             'warga_id'      => $warga->id,
             'nik'            => $warga->nik,
             'nama'           => $warga->nama,
@@ -49,12 +45,33 @@ class WargaPengajuanController extends Controller
             'nomor_wa'      => $request->nomor_wa,
             'nomor_surat'    => $template->nomor_surat,
             'isi_surat'      => $isiSurat,
-            'kepada'         => null, // akan digenerate pertama kali saat admin buka
+            'kepada'         => null,
             'status'         => 'menunggu',
             'tanggal_pengajuan' => now(),
         ]);
 
-        return redirect()->route('pengajuan-surat')
-            ->with('success', 'Pengajuan surat berhasil dikirim.');
+        return redirect()->route('pengajuan-surat-sukses', $pengajuan->id);
+    }
+
+    public function sukses($id)
+    {
+        // Ambil satu data pengajuan berdasarkan ID
+        $pengajuan = PengajuanSurat::with('templateSurat')->findOrFail($id);
+
+        // Format tanggal & waktu (mengikuti zona waktu Jakarta)
+        $tanggal = $pengajuan->tanggal_pengajuan
+            ? $pengajuan->tanggal_pengajuan->timezone('Asia/Jakarta')->format('d F Y')
+            : now()->timezone('Asia/Jakarta')->format('d F Y');
+
+        $jam = $pengajuan->created_at
+            ? $pengajuan->created_at->timezone('Asia/Jakarta')->format('H:i')
+            : now()->timezone('Asia/Jakarta')->format('H:i');
+
+        return view('frontend.pengajuan-surat-sukses', compact('pengajuan', 'tanggal', 'jam'));
+    }
+
+    public function pelacakan()
+    {
+        return view('frontend.pelacakan-surat');
     }
 }
