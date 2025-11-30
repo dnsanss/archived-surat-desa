@@ -79,7 +79,7 @@
     <div style="text-align: left; margin-top: 15px;">
         <p><strong>Tanggal :</strong> {{ $tanggal }}</p>
         <p><strong>Pukul :</strong> {{ $jam }}</p>
-        <p><strong>Jenis Surat :</strong> {{ $pengajuan->templateSurat->nama_template }}</p>
+        <p><strong>Jenis Surat :</strong> {{ $pengajuan->template->nama_template }}</p>
         <p><strong>Nama :</strong> {{ $pengajuan->nama }}</p>
         <p><strong>NIK :</strong> {{ $pengajuan->nik }}</p>
         <p><strong>Status :</strong>

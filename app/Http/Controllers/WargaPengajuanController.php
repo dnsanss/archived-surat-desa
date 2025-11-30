@@ -56,7 +56,7 @@ class WargaPengajuanController extends Controller
     public function sukses($id)
     {
         // Ambil satu data pengajuan berdasarkan ID
-        $pengajuan = PengajuanSurat::with('templateSurat')->findOrFail($id);
+        $pengajuan = PengajuanSurat::with('template')->findOrFail($id);
 
         // Format tanggal & waktu (mengikuti zona waktu Jakarta)
         $tanggal = $pengajuan->tanggal_pengajuan
