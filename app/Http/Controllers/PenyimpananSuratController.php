@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use App\Models\SuratTerbit;
-use App\Models\DataWarga;
 use Carbon\Carbon;
+use App\Models\DataWarga;
+use App\Models\SuratTerbit;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PenyimpananSuratController extends Controller
 {
@@ -56,5 +57,23 @@ class PenyimpananSuratController extends Controller
             ->firstOrFail();
 
         return view('frontend.detail-penyimpanan', compact('surat'));
+    }
+
+    public function download($id)
+    {
+        $surat = SuratTerbit::findOrFail($id);
+
+        // Bersihkan path yang tidak perlu
+        // karena file_pdf = "storage/surat-keluar/nama.pdf"
+        $relativePath = str_replace('storage/', '', $surat->file_pdf);
+
+        // Sekarang path = "surat-keluar/nama.pdf"
+        $fullPath = storage_path('app/' . $relativePath);
+
+        if (!file_exists($fullPath)) {
+            abort(404, 'File PDF tidak ditemukan di storage lokal');
+        }
+
+        return response()->download($fullPath);
     }
 }

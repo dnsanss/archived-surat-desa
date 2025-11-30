@@ -107,3 +107,7 @@ Route::middleware('warga')->group(function () {
     Route::get('/penyimpanan/{id}', [PenyimpananSuratController::class, 'show'])
         ->name('penyimpanan.show');
 });
+
+// route untuk download surat di penyimpanan surat
+Route::get('/download-surat/{id}', [PenyimpananSuratController::class, 'download'])
+    ->name('surat.download');
