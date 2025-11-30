@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class PelacakanSuratController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         // Cek session warga
         if (!session()->has('warga_id')) {
@@ -41,5 +41,19 @@ class PelacakanSuratController extends Controller
         return view('frontend.pelacakan-surat', [
             'pengajuan' => $pengajuan,
         ]);
+
+        $riwayat = PengajuanSurat::latest()->get();
+
+        return view('pelacakan.index', compact('riwayat'));
+
+        $jam = $pengajuan->created_at
+            ? $pengajuan->created_at->timezone('Asia/Jakarta')->format('H:i')
+            : now()->timezone('Asia/Jakarta')->format('H:i');
+    }
+    public function show($id)
+    {
+        $surat = PengajuanSurat::with('template')->findOrFail($id);
+
+        return view('frontend.detail-pelacakan', compact('surat'));
     }
 }

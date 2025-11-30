@@ -96,6 +96,9 @@ Route::middleware('warga')->group(function () {
     Route::get('/pengajuan-surat/pelacakan-surat', [PelacakanSuratController::class, 'index'])
         ->name('pelacakan.surat');
 
+    //route untuk melihat detail pelacakan surat
+    Route::get('/pelacakan/{id}', [PelacakanSuratController::class, 'show'])->name('pelacakan.show');
+
     // 🔹 3. Penyimpanan surat
     Route::get('/pengajuan-surat/penyimpanan-surat', [WargaPengajuanController::class, 'penyimpanan'])
         ->name('penyimpanan.surat');
