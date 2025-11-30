@@ -5,6 +5,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\WargaAuthController;
 use App\Http\Controllers\ProsesSuratController;
+use App\Http\Controllers\PelacakanSuratController;
 use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\WargaPengajuanController;
 use App\Http\Controllers\VerifikasiSuratController;
@@ -92,7 +93,7 @@ Route::middleware('warga')->group(function () {
         ->name('pengajuan.store');
 
     // 🔹 2. Lacak surat
-    Route::get('/pengajuan-surat/pelacakan-surat', [WargaPengajuanController::class, 'pelacakan'])
+    Route::get('/pengajuan-surat/pelacakan-surat', [PelacakanSuratController::class, 'index'])
         ->name('pelacakan.surat');
 
     // 🔹 3. Penyimpanan surat

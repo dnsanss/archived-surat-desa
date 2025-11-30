@@ -29,7 +29,7 @@ class PengajuanSurat extends Model
         'created_at' => 'datetime',
     ];
 
-    public function templateSurat()
+    public function template()
     {
         return $this->belongsTo(TemplateSurat::class, 'template_id');
     }
