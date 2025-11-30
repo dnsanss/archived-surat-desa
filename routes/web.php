@@ -9,6 +9,7 @@ use App\Http\Controllers\PelacakanSuratController;
 use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\WargaPengajuanController;
 use App\Http\Controllers\VerifikasiSuratController;
+use App\Http\Controllers\PenyimpananSuratController;
 
 // import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
@@ -100,6 +101,9 @@ Route::middleware('warga')->group(function () {
     Route::get('/pelacakan/{id}', [PelacakanSuratController::class, 'show'])->name('pelacakan.show');
 
     // 🔹 3. Penyimpanan surat
-    Route::get('/pengajuan-surat/penyimpanan-surat', [WargaPengajuanController::class, 'penyimpanan'])
+    Route::get('/pengajuan-surat/penyimpanan-surat', [PenyimpananSuratController::class, 'index'])
         ->name('penyimpanan.surat');
+
+    Route::get('/penyimpanan/{id}', [PenyimpananSuratController::class, 'show'])
+        ->name('penyimpanan.show');
 });

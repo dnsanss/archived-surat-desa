@@ -29,6 +29,12 @@ class PengajuanSurat extends Model
         'created_at' => 'datetime',
     ];
 
+
+    public function warga()
+    {
+        return $this->belongsTo(DataWarga::class, 'warga_id');
+    }
+
     public function template()
     {
         return $this->belongsTo(TemplateSurat::class, 'template_id');

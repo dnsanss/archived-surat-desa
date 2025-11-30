@@ -117,6 +117,7 @@ class ProsesSuratController extends Controller
         // Simpan metadata surat ke DB (path publikable via /storage/...)
         SuratTerbit::create([
             'pengajuan_id'      => $pengajuan->id,
+            'warga_id'          => $pengajuan->warga_id,
             'nomor_surat'       => $pengajuan->nomor_surat,
             'nama_ttd'          => $template->nama_ttd,
             'kepada'            => $pengajuan->kepada,

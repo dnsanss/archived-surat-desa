@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class DataWarga extends Authenticatable
@@ -27,4 +26,21 @@ class DataWarga extends Authenticatable
         'pekerjaan',
         'kewarganegaraan',
     ];
+
+    public function pengajuan()
+    {
+        return $this->hasMany(PengajuanSurat::class, 'warga_id');
+    }
+
+    public function suratTerbit()
+    {
+        return $this->hasManyThrough(
+            SuratTerbit::class,
+            PengajuanSurat::class,
+            'warga_id',       // foreign key di tabel pengajuan_surat
+            'pengajuan_id',   // foreign key di tabel surat_terbit
+            'id',             // local key di data_warga
+            'id'              // local key di pengajuan_surat
+        );
+    }
 }
