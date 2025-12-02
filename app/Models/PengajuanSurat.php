@@ -24,6 +24,17 @@ class PengajuanSurat extends Model
         'status',
     ];
 
+    protected $casts = [
+        'tanggal_pengajuan' => 'datetime',
+        'created_at' => 'datetime',
+    ];
+
+
+    public function warga()
+    {
+        return $this->belongsTo(DataWarga::class, 'warga_id');
+    }
+
     public function template()
     {
         return $this->belongsTo(TemplateSurat::class, 'template_id');

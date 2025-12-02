@@ -11,6 +11,7 @@ class SuratTerbit extends Model
 
     protected $fillable = [
         'pengajuan_id',
+        'warga_id',
         'nomor_surat',
         'kepada',
         'file_pdf',
@@ -54,6 +55,11 @@ class SuratTerbit extends Model
                 }
             }
         });
+    }
+
+    public function warga()
+    {
+        return $this->belongsTo(DataWarga::class, 'warga_id');
     }
 
     public function pengajuan()

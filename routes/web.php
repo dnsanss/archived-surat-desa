@@ -5,9 +5,11 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\WargaAuthController;
 use App\Http\Controllers\ProsesSuratController;
+use App\Http\Controllers\PelacakanSuratController;
 use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\WargaPengajuanController;
 use App\Http\Controllers\VerifikasiSuratController;
+use App\Http\Controllers\PenyimpananSuratController;
 
 // import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
@@ -36,13 +38,12 @@ Route::get('/surat-masuk/view/{filename}', function ($filename) {
 })->name('surat-masuk.view')->middleware('auth');
 
 // import controller pengajuan surat
-Route::get('/pengajuan-surat', [FrontendController::class, 'pengajuanSurat'])->name('pengajuan-surat');
-
-// route untuk menyimpan pengajuan surat
-Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->name('pengajuan-surat.store');
+Route::get('/pengajuan-surat', [FrontendController::class, 'pengajuanSurat'])
+    ->name('pengajuan-surat');
 
 // route untuk halaman sukses pengajuan surat
-Route::get('/pengajuan-surat/sukses', [PengajuanSuratController::class, 'sukses'])->name('pengajuan-surat.sukses');
+Route::get('/pengajuan-surat-sukses/{id}', [WargaPengajuanController::class, 'sukses'])
+    ->name('pengajuan-surat-sukses');
 
 // route untuk halaman proses surat (admin)
 Route::middleware(['auth'])->group(function () {
@@ -93,10 +94,20 @@ Route::middleware('warga')->group(function () {
         ->name('pengajuan.store');
 
     // 🔹 2. Lacak surat
-    Route::get('/pengajuan-surat/pelacakan-surat', [WargaPengajuanController::class, 'pelacakan'])
+    Route::get('/pengajuan-surat/pelacakan-surat', [PelacakanSuratController::class, 'index'])
         ->name('pelacakan.surat');
 
+    //route untuk melihat detail pelacakan surat
+    Route::get('/pelacakan/{id}', [PelacakanSuratController::class, 'show'])->name('pelacakan.show');
+
     // 🔹 3. Penyimpanan surat
-    Route::get('/pengajuan-surat/penyimpanan-surat', [WargaPengajuanController::class, 'penyimpanan'])
+    Route::get('/pengajuan-surat/penyimpanan-surat', [PenyimpananSuratController::class, 'index'])
         ->name('penyimpanan.surat');
+
+    Route::get('/penyimpanan/{id}', [PenyimpananSuratController::class, 'show'])
+        ->name('penyimpanan.show');
 });
+
+// route untuk download surat di penyimpanan surat
+Route::get('/download-surat/{id}', [PenyimpananSuratController::class, 'download'])
+    ->name('surat.download');

@@ -102,6 +102,7 @@ class ProsesSuratController extends Controller
             'nama_template' => $template->nama_template,
             'isi_template'  => $isiSuratFinal,
             'qrCode'        => $qrBase64,
+            'nama_ttd'      => $template->nama_ttd,
         ])->setPaper([0, 0, 595.28, 935.43], 'portrait')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
@@ -116,7 +117,9 @@ class ProsesSuratController extends Controller
         // Simpan metadata surat ke DB (path publikable via /storage/...)
         SuratTerbit::create([
             'pengajuan_id'      => $pengajuan->id,
+            'warga_id'          => $pengajuan->warga_id,
             'nomor_surat'       => $pengajuan->nomor_surat,
+            'nama_ttd'          => $template->nama_ttd,
             'kepada'            => $pengajuan->kepada,
             'file_pdf'          => 'storage/' . $filePath,
             'tanggal_pengajuan' => now()->setTimezone('Asia/Jakarta'),
