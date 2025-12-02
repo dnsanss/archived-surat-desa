@@ -53,6 +53,8 @@ class KarangasemPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->globalSearch(false)
+            
             ->renderHook(
                 'panels::auth.login.form.after',
                 fn() => view('filamen.custom.tombol-kembali')
