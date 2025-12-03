@@ -28,6 +28,11 @@ class DataWargaResource extends Resource
     //icon sidebar
     protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Surat-Surat';   // Grup menu untuk sidebar
+    }
+
     //memanggil fungsi untuk menampilkan total warga, jumlah laki-laki, jumlah perempuan dari folder DataWargas/Widgets
     public static function getNavigationLabel(): string
     {

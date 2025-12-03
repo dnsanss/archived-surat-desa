@@ -35,6 +35,10 @@ class ArsipSuratResource extends Resource
     // {
     //     return static::$navigationGroup = 'Data Surat';
     // }
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Surat-Surat';
+    }
 
     //menu input
     public static function form(Schema $schema): Schema

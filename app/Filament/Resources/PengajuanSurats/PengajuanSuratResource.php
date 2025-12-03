@@ -31,6 +31,11 @@ class PengajuanSuratResource extends Resource
     //icon sidebar
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentText;
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Surat-Surat';
+    }
+    
     //label sidebar
     protected static ?string $navigationLabel = 'Pengajuan Surat Warga';
     protected static ?string $pluralLabel = 'Pengajuan Surat Warga';

@@ -19,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\View\ViewServiceProvider;
+use Filament\Navigation\NavigationGroup;
 
 class KarangasemPanelProvider extends PanelProvider
 {
@@ -54,6 +55,18 @@ class KarangasemPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->globalSearch(false)
+
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Surat-Surat')
+                    ->collapsible()
+                    ->collapsed(),
+
+                    NavigationGroup::make()
+                    ->label('Data Desa')
+                    ->collapsible()
+                    ->collapsed(),
+            ])
             
             ->renderHook(
                 'panels::auth.login.form.after',
