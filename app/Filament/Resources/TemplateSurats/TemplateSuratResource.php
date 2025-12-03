@@ -38,6 +38,11 @@ class TemplateSuratResource extends Resource
     // title halaman
     protected static ?string $recordTitleAttribute = 'Template Surat';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Surat-Surat';
+    }
+    
     //menu input
     public static function form(Schema $schema): Schema
     {

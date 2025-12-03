@@ -33,6 +33,11 @@ class SuratKeluarResource extends Resource
     protected static ?string $navigationLabel = 'Surat Keluar';
     protected static ?string $pluralLabel = 'Surat Keluar';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Surat-Surat';   // Grup yang sama dengan resource lain
+    }
+    
     public static function form(Schema $schema): Schema
     {
         return $schema

@@ -35,6 +35,11 @@ class BeritaResource extends Resource
     protected static ?string $navigationLabel = 'Berita Desa';
     protected static ?string $pluralLabel = 'Berita Desa';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Informasi Desa'; 
+    }
+
     // Form Schema
     public static function form(Schema $schema): Schema
     {
