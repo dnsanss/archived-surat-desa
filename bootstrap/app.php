@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'pengguna' => \App\Http\Middleware\PenggunaAuth::class,
             'guest.pengguna' => \App\Http\Middleware\GuestPengguna::class,
+            'verified' => \App\Http\Middleware\PenggunaAuth::class,
         ]);
 
         // GROUP WEB (WAJIB – JANGAN DIHAPUS)

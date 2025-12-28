@@ -83,6 +83,15 @@ Route::middleware('guest.pengguna')->group(function () {
     Route::post('/register', [AuthController::class, 'registerSubmit'])->name('register.submit');
 });
 
+// route untuk verifikasi email pengguna
+Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail'])
+    ->name('email.verify');
+
+// route untuk halaman pemberitahuan email belum verifikasi
+Route::get('/email-belum-verifikasi', function () {
+    return view('frontend.email-not-verified');
+})->name('email.notice');
+
 
 // 3 fitur utama di pengajuan surat
 Route::middleware('pengguna')->group(function () {

@@ -20,6 +20,7 @@ class DataPengguna extends Authenticatable
         'email',
         'nomor_hp',
         'password',
+        'verification_token',
         'email_verified_at',
     ];
 
@@ -43,8 +44,6 @@ class DataPengguna extends Authenticatable
     }
 
     //Pengajuan surat milik pengguna
-    //(lewat tabel pengajuan_surat → warga_id)
-
     public function pengajuanSurat()
     {
         return $this->hasMany(PengajuanSurat::class, 'warga_id', 'id');

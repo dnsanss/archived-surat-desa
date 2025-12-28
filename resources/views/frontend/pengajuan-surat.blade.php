@@ -65,7 +65,7 @@
 
     {{-- Tombol Logout --}}
     <div class="text-center mt-4">
-        <a href="{{ route('warga.logout') }}" class="btn btn-danger">Logout</a>
+        <a href="{{ route('logout') }}" class="btn btn-danger">Logout</a>
     </div>
     @endif
 
