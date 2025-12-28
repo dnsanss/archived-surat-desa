@@ -13,8 +13,8 @@ class PenyimpananSuratController extends Controller
     public function index()
     {
         // cek session warga seperti pelacakan
-        if (!session()->has('warga_id')) {
-            return redirect()->route('warga.login')->with([
+        if (!session()->has('pengguna_login')) {
+            return redirect()->route('pengguna_login')->with([
                 'status' => 'error',
                 'msg' => 'Silakan login terlebih dahulu.'
             ]);

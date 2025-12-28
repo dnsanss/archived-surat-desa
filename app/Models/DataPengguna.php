@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class DataPengguna extends Authenticatable
+{
+    use Notifiable;
+
+    protected $table = 'data_pengguna';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'kode_pengguna',
+        'nama',
+        'nik',
+        'email',
+        'nomor_hp',
+        'password',
+        'email_verified_at',
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function isVerified()
+    {
+        return !is_null($this->email_verified_at);
+    }
+
+    //   Relasi ke data_warga berdasarkan NIK
+    public function warga()
+    {
+        return $this->belongsTo(DataWarga::class, 'nik', 'nik');
+    }
+
+    //Pengajuan surat milik pengguna
+    //(lewat tabel pengajuan_surat → warga_id)
+
+    public function pengajuanSurat()
+    {
+        return $this->hasMany(PengajuanSurat::class, 'warga_id', 'id');
+    }
+}

@@ -18,13 +18,13 @@
 <div class="container mt-5">
 
     {{-- CEK STATUS LOGIN --}}
-    @if (!session('warga_logged_in'))
+    @if (!session('pengguna_login'))
 
     {{-- Jika belum login --}}
     <div class="text-center p-5 border rounded">
         <h3>Anda belum masuk</h3>
         <p>Silakan masuk terlebih dahulu untuk mengakses fitur pengajuan surat.</p>
-        <a href="{{ route('warga.login') }}" class="btn btn-primary">
+        <a href="{{ route('login') }}" class="btn btn-primary">
             Masuk Disini
         </a>
     </div>
@@ -34,7 +34,7 @@
     <div class="row text-center">
         {{-- Jika sudah login --}}
         <div class="text-center mb-4">
-            <h4>Selamat Datang, <strong>{{ session('warga_nama') }}</strong></h4>
+            <h4>Selamat Datang, <strong>{{ session('data_pengguna.nama') }}</strong></h4>
         </div>
 
         {{-- Menu Pengajuan Surat --}}

@@ -3,64 +3,49 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Warga - Pengajuan Surat</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Login</title>
+    @vite('resources/css/app.css')
 </head>
 
-<body class="bg-light">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
+    <div class="bg-white w-full max-w-md p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
 
-                <div class="card shadow-sm">
-                    <div class="card-body p-4">
-
-                        <h4 class="text-center mb-3">Login</h4>
-                        <p class="text-center text-muted">
-                            Masukkan <strong>NIK</strong> dan <strong>Tanggal Lahir</strong> untuk melanjutkan.
-                        </p>
-
-                        {{-- Tampilkan error jika gagal login --}}
-                        @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $err)
-                                <li>{{ $err }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
-
-                        {{-- Form Login --}}
-                        <form method="POST" action="{{ route('warga.login.submit') }}">
-                            @csrf
-
-                            <div class="mb-3">
-                                <label class="form-label">NIK</label>
-                                <input type="text" name="nik" class="form-control" maxlength="16" placeholder="Masukkan NIK yang ada di KTP anda" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Tanggal Lahir (dd-mm-yyyy)</label>
-                                <input type="password" name="password" class="form-control" placeholder="contoh: 02-12-2001" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100">
-                                Login
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
-
-                <p class="text-center mt-3 text-muted">
-                    <br>Login menggunakan NIK & tanggal lahir Anda.
-                </p>
-
-            </div>
+        @if ($errors->any())
+        <div class="bg-red-100 text-red-700 p-3 rounded mb-3">
+            {{ $errors->first() }}
         </div>
+        @endif
+
+        <form method="POST" action="{{ route('login.submit') }}" class="space-y-4">
+            @csrf
+
+            <div>
+                <label>Email</label>
+                <input type="email" name="email"
+                    class="w-full border rounded px-3 py-2"
+                    required>
+            </div>
+
+            <div>
+                <label>Password</label>
+                <input type="password" name="password"
+                    class="w-full border rounded px-3 py-2"
+                    required>
+            </div>
+
+            <button class="w-full bg-blue-600 text-white py-2 rounded">
+                Login
+            </button>
+        </form>
+
+        <p class="text-center mt-4 text-sm">
+            Belum punya akun?
+            <a href="{{ route('register') }}" class="text-blue-600 font-semibold">
+                Daftar
+            </a>
+        </p>
     </div>
 
 </body>

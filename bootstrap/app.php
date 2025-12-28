@@ -12,16 +12,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+
+        // ALIAS MIDDLEWARE
         $middleware->alias([
-            'warga' => WargaAuth::class,
+            'pengguna' => \App\Http\Middleware\PenggunaAuth::class,
+            'guest.pengguna' => \App\Http\Middleware\GuestPengguna::class,
         ]);
+
+        // GROUP WEB (WAJIB – JANGAN DIHAPUS)
         $middleware->group('web', [
-            // COOKIE & SESSION (WAJIB ADA)
+            // COOKIE & SESSION
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
 
-            // ERROR SHARING + CSR
+            // SHARE ERROR + CSRF
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
 
@@ -29,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
