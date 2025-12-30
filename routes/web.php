@@ -96,7 +96,7 @@ Route::get('/email-belum-verifikasi', function () {
 // 3 fitur utama di pengajuan surat
 Route::middleware('pengguna')->group(function () {
     // logout
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Pengajuan surat
     Route::get('/pengajuan-surat/form-pengajuan-surat', [WargaPengajuanController::class, 'form'])

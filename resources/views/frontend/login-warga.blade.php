@@ -13,10 +13,15 @@
         <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
 
         @if ($errors->any())
-        <div class="bg-red-100 text-red-700 p-3 rounded mb-3">
-            {{ $errors->first() }}
+        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+            <ul class="text-sm list-disc pl-4">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
         @endif
+
 
         <form method="POST" action="{{ route('login.submit') }}" class="space-y-4">
             @csrf

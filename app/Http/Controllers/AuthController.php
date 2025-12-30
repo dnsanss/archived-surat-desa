@@ -19,26 +19,51 @@ class AuthController extends Controller
 
     public function loginSubmit(Request $request)
     {
-        // validasi
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        // VALIDASI + PESAN INDONESIA
+        $request->validate(
+            [
+                'email' => 'required|email',
+                'password' => 'required',
+            ],
+            [
+                'email.required' => 'Email wajib diisi.',
+                'email.email' => 'Format email tidak valid.',
+                'password.required' => 'Password wajib diisi.',
+            ]
+        );
 
+        // CEK EMAIL TERDAFTAR
         $pengguna = DataPengguna::where('email', $request->email)->first();
 
-        if (!$pengguna || !Hash::check($request->password, $pengguna->password)) {
-            return back()->withErrors(['email' => 'Login gagal']);
+        if (!$pengguna) {
+            return back()
+                ->withErrors(['email' => 'Data pengguna tidak ditemukan.'])
+                ->withInput();
         }
 
+        // CEK PASSWORD
+        if (!Hash::check($request->password, $pengguna->password)) {
+            return back()
+                ->withErrors(['password' => 'Password yang Anda masukkan salah.'])
+                ->withInput();
+        }
+
+        // CEK EMAIL SUDAH VERIFIKASI
+        if (!$pengguna->email_verified_at) {
+            return back()
+                ->withErrors(['email' => 'Silakan verifikasi email terlebih dahulu.']);
+        }
+
+        // LOGIN BERHASIL
         session([
             'pengguna_login' => true,
             'pengguna_id'    => $pengguna->id,
-            'data_pengguna'  => $pengguna->fresh(),
+            'data_pengguna'  => $pengguna,
         ]);
 
         return redirect()->route('pengajuan-surat');
     }
+
 
     //Register
     public function register()
@@ -50,26 +75,54 @@ class AuthController extends Controller
     public function registerSubmit(Request $request)
     {
         // validasi
-        $request->validate([
-            'nama'      => 'required|string|max:100',
-            'nik'       => 'required|digits:16',
-            'email'     => 'required|email|unique:data_pengguna,email',
-            'nomor_hp'  => 'required',
-            'password'  => 'required|min:6|confirmed',
-        ]);
+        $request->validate(
+            [
+                'nama'      => 'required|string|max:100',
+                'nik'       => 'required|digits:16',
+                'email'     => 'required|email|unique:data_pengguna,email',
+                'nomor_hp'  => 'required',
+                'password'  => 'required|min:6|confirmed',
+            ],
+            [
+                'nama.required' => 'Nama wajib diisi.',
+                'nik.required' => 'NIK wajib diisi.',
+                'nik.digits' => 'NIK harus 16 digit.',
+                'email.required' => 'Email wajib diisi.',
+                'email.email' => 'Format email tidak valid.',
+                'email.unique' => 'Email sudah terdaftar.',
+                'nomor_hp.required' => 'Nomor HP wajib diisi.',
+                'password.required' => 'Password wajib diisi.',
+                'password.confirmed' => 'Konfirmasi password tidak cocok.',
+                'password.min' => 'Password minimal 6 karakter.',
+            ]
+        );
 
         //cek NIK terdaftar di data_warga
         $warga = DataWarga::where('nik', $request->nik)->first();
+
         if (!$warga) {
-            return back()->withErrors([
-                'nik' => 'NIK tidak terdaftar sebagai warga'
-            ]);
+            return back()
+                ->withErrors([
+                    'nik' => 'NIK tidak terdaftar sebagai warga.'
+                ])
+                ->withInput();
+        }
+
+        //cek NIK sudah terdaftar di data_pengguna
+        $user = DataPengguna::where('nik', $request->nik)->first();
+
+        if ($user) {
+            return back()
+                ->withErrors([
+                    'nik' => 'NIK ini sudah terdaftar sebagai pengguna.'
+                ])
+                ->withInput();
         }
         //buat token verifikasi
         $token = Str::uuid();
 
         //simpan data pengguna
-        $pengguna = DataPengguna::create([
+        $user = DataPengguna::create([
             'kode_pengguna' => random_int(100000, 999999),
             'nama'      => $request->nama,
             'nik'       => $request->nik,
@@ -79,25 +132,23 @@ class AuthController extends Controller
             'verification_token' => $token,
         ]);
 
-        Mail::to($request->email)->send(
-            new VerifikasiEmailPengguna($pengguna)
-        );
+        Mail::to($user->email)->send(new VerifikasiEmailPengguna($token, $user->nama));
 
         //redirect ke halaman login dengan pesan sukses
-        return redirect()->route('pengajuan-surat')
-            ->with('success', 'Registrasi berhasil. Silakan login.');
+        return redirect()->route('login')
+            ->with('success', 'Registrasi berhasil. Silakan cek email untuk verifikasi.');
     }
 
     public function verifyEmail($token)
     {
-        $pengguna = DataPengguna::where('verification_token', $token)->first();
+        $user = DataPengguna::where('verification_token', $token)->first();
 
-        if (!$pengguna) {
+        if (!$user) {
             return redirect()->route('login')
                 ->with('error', 'Token verifikasi tidak valid.');
         }
 
-        $pengguna->update([
+        $user->update([
             'email_verified_at' => now(),
             'verification_token' => null,
         ]);

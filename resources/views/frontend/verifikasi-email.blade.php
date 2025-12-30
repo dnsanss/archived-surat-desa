@@ -1,10 +1,17 @@
-<h3>Halo {{ $pengguna->nama }}</h3>
+<!DOCTYPE html>
+<html>
 
-<p>Silakan klik tombol di bawah ini untuk memverifikasi email Anda:</p>
+<body>
+    <h2>Halo {{ $nama }}</h2>
 
-<a href="{{ route('email.verify', $pengguna->verification_token) }}"
-    style="padding:10px 15px;background:#2563eb;color:#fff;text-decoration:none;">
-    Verifikasi Email
-</a>
+    <p>Silakan klik tombol di bawah ini untuk memverifikasi email Anda.</p>
 
-<p>Jika Anda tidak merasa mendaftar, abaikan email ini.</p>
+    <a href="{{ url('/verify-email/' . $token) }}"
+        style="padding:10px 15px; background:#16a34a; color:white; text-decoration:none;">
+        Verifikasi Email
+    </a>
+
+    <p>Jika Anda tidak mendaftar, abaikan email ini.</p>
+</body>
+
+</html>
