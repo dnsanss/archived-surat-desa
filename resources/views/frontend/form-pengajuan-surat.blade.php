@@ -21,22 +21,19 @@
                 <!-- NIK -->
                 <div class="mb-3">
                     <label class="form-label">NIK</label>
-                    <input type="text" class="form-control" value="{{ $warga->nik }}" readonly>
+                    <input type="text" class="form-control" value="{{ session('data_pengguna')->nik }}" readonly>
                 </div>
 
                 <!-- Nama -->
                 <div class="mb-3">
                     <label class="form-label">Nama</label>
-                    <input type="text" class="form-control" value="{{ $warga->nama }}" readonly>
+                    <input type="text" class="form-control" value="{{ session('data_pengguna')->nama }}" readonly>
                 </div>
 
                 <!-- Nomor WA -->
                 <div class="mb-3">
                     <label class="form-label">Nomor WhatsApp</label>
-                    <input type="text" name="nomor_wa" class="form-control" placeholder="Contoh: 08123456789" required>
-                    @error('nomor_wa')
-                    <div class="text-danger small">{{ $nomor_wa }}</div>
-                    @enderror
+                    <input type="text" class="form-control" value="{{ session('data_pengguna')->nomor_hp }}" readonly>
                 </div>
 
                 <!-- Pilihan Template Surat -->

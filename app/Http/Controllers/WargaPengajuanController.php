@@ -14,9 +14,9 @@ class WargaPengajuanController extends Controller
     public function form()
     {
         // Ambil data warga dari session
-        $warga = DataWarga::find(session('warga_id'));
+        $pengguna = session('data_pengguna');
 
-        // Ambil list template
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
         $templates = TemplateSurat::all();
 
         return view('frontend.form-pengajuan-surat', compact('warga', 'templates'));
@@ -25,32 +25,42 @@ class WargaPengajuanController extends Controller
     // Proses penyimpanan pengajuan surat
     public function store(Request $request)
     {
-        $request->validate([
-            'nomor_wa' => 'required|string|max:15',
-            'template_id' => 'required|exists:templates_surat,id',
-        ]);
+        $pengguna = session('data_pengguna');
+        if (!$pengguna) {
+            return redirect()->route('login');
+        }
 
-        $warga = DataWarga::find(session('warga_id'));
-        $template = TemplateSurat::find($request->template_id);
+        // Ambil warga via NIK pengguna
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
+        if (!$warga) {
+            return back()->with('error', 'Data warga tidak ditemukan.');
+        }
+
+        // Ambil template
+        $template = TemplateSurat::findOrFail($request->template_id);
+
+        // Generate isi surat
         $isiSurat = SuratHelper::replaceVariables(
             $template->isi_template,
             $warga
         );
 
         $pengajuan = PengajuanSurat::create([
-            'warga_id'      => $warga->id,
-            'nik'            => $warga->nik,
-            'nama'           => $warga->nama,
-            'template_id'    => $template->id,
-            'nomor_wa'      => $request->nomor_wa,
-            'nomor_surat'    => $template->nomor_surat,
-            'isi_surat'      => $isiSurat,
-            'kepada'         => null,
-            'status'         => 'menunggu',
+            'warga_id'          => $warga->id,
+            'nik'               => $warga->nik,
+            'nama'              => $warga->nama,
+            'template_id'       => $template->id,
+            'nomor_surat'       => $template->nomor_surat,
+            'nomor_wa'          => $pengguna->nomor_hp,
+            'isi_surat'         => $isiSurat,
+            'kepada'            => null,
             'tanggal_pengajuan' => now(),
+            'status'            => 'menunggu',
         ]);
 
-        return redirect()->route('pengajuan-surat-sukses', $pengajuan->id);
+        return redirect()
+            ->route('pengajuan-surat-sukses', $pengajuan->id)
+            ->with('success', 'Pengajuan surat berhasil dikirim.');
     }
 
     public function sukses($id)
