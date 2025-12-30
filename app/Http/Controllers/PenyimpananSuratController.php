@@ -69,22 +69,35 @@ class PenyimpananSuratController extends Controller
         return view('frontend.detail-penyimpanan', compact('surat'));
     }
 
-    public function download($id)
+    public function download($token)
     {
         if (!session()->has('data_pengguna')) {
-            return redirect()->route('login');
+            abort(403);
         }
 
-        $surat = SuratTerbit::findOrFail($id);
+        $pengguna = session('data_pengguna');
 
-        // file_pdf contoh: storage/surat-keluar/nama.pdf
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
+        if (!$warga) {
+            abort(403);
+        }
+
+        $surat = SuratTerbit::with('pengajuan')
+            ->where('qr_token', $token)
+            ->whereHas('pengajuan', function ($q) use ($warga) {
+                $q->where('warga_id', $warga->id);
+            })
+            ->firstOrFail();
+
         $relativePath = str_replace('storage/', '', $surat->file_pdf);
         $fullPath = storage_path('app/' . $relativePath);
 
         if (!file_exists($fullPath)) {
-            abort(404, 'File PDF tidak ditemukan di storage lokal.');
+            abort(404);
         }
 
-        return response()->download($fullPath);
+        $namaFile = 'Surat-' . str_replace('/', '-', $surat->nomor_surat) . '.pdf';
+
+        return response()->download($fullPath, $namaFile);
     }
 }

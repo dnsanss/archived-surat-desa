@@ -121,5 +121,5 @@ Route::middleware('pengguna')->group(function () {
 });
 
 // route untuk download surat di penyimpanan surat
-Route::get('/download-surat/{id}', [PenyimpananSuratController::class, 'download'])
+Route::get('/download-surat/{token}', [PenyimpananSuratController::class, 'download'])
     ->name('surat.download');

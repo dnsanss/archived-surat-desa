@@ -33,7 +33,7 @@
 
             <p><strong>File Surat:</strong></p>
             @if($surat->file_pdf)
-            <a href="{{ route('surat.download', $surat->id) }}"
+            <a href="{{ route('surat.download', $surat->qr_token) }}"
                 class="btn btn-success">
                 Download Surat
             </a>
