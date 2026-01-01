@@ -12,16 +12,16 @@ class PelacakanSuratController extends Controller
     public function index()
     {
         // Cek session warga
-        if (!session()->has('warga_id')) {
-            return redirect()->route('warga.login')->with([
+        if (!session()->has('pengguna_login')) {
+            return redirect()->route('login')->with([
                 'status' => 'error',
                 'msg' => 'Silakan login terlebih dahulu.'
             ]);
         }
 
-        $warga = DataWarga::find(session('warga_id'));
+        $warga = DataWarga::find(session('pengguna_id'));
         if (!$warga) {
-            return redirect()->route('warga.login')->with([
+            return redirect()->route('login')->with([
                 'status' => 'error',
                 'msg' => 'Data warga tidak ditemukan.'
             ]);

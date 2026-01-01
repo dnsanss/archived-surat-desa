@@ -5,26 +5,32 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\DataWarga;
 use App\Models\SuratTerbit;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PenyimpananSuratController extends Controller
 {
     public function index()
     {
-        // cek session warga seperti pelacakan
-        if (!session()->has('warga_id')) {
-            return redirect()->route('warga.login')->with([
-                'status' => 'error',
-                'msg' => 'Silakan login terlebih dahulu.'
-            ]);
+        // 1. Cek login pengguna
+        if (!session()->has('data_pengguna')) {
+            return redirect()->route('login')
+                ->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        $wargaId = session('warga_id');
+        $pengguna = session('data_pengguna');
 
+        // 2. Ambil data warga berdasarkan NIK pengguna
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
+
+        if (!$warga) {
+            return redirect()->route('pengajuan-surat')
+                ->with('error', 'Data warga belum terverifikasi.');
+        }
+
+        // 3. Ambil surat terbit milik warga tersebut
         $suratTersimpan = SuratTerbit::with(['pengajuan.template'])
-            ->whereHas('pengajuan', function ($q) use ($wargaId) {
-                $q->where('warga_id', $wargaId);
+            ->whereHas('pengajuan', function ($q) use ($warga) {
+                $q->where('warga_id', $warga->id);
             })
             ->orderBy('created_at', 'desc')
             ->get()
@@ -40,40 +46,58 @@ class PenyimpananSuratController extends Controller
 
     public function show($id)
     {
-        if (!session()->has('warga_id')) {
-            return redirect()->route('warga.login')->with([
-                'status' => 'error',
-                'msg' => 'Silakan login terlebih dahulu.'
-            ]);
+        if (!session()->has('data_pengguna')) {
+            return redirect()->route('login')
+                ->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        $wargaId = session('warga_id');
+        $pengguna = session('data_pengguna');
+
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
+        if (!$warga) {
+            return redirect()->route('pengajuan-surat')
+                ->with('error', 'Data warga tidak ditemukan.');
+        }
 
         $surat = SuratTerbit::with(['pengajuan.template'])
             ->where('id', $id)
-            ->whereHas('pengajuan', function ($q) use ($wargaId) {
-                $q->where('warga_id', $wargaId);
+            ->whereHas('pengajuan', function ($q) use ($warga) {
+                $q->where('warga_id', $warga->id);
             })
             ->firstOrFail();
 
         return view('frontend.detail-penyimpanan', compact('surat'));
     }
 
-    public function download($id)
+    public function download($token)
     {
-        $surat = SuratTerbit::findOrFail($id);
+        if (!session()->has('data_pengguna')) {
+            abort(403);
+        }
 
-        // Bersihkan path yang tidak perlu
-        // karena file_pdf = "storage/surat-keluar/nama.pdf"
+        $pengguna = session('data_pengguna');
+
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
+        if (!$warga) {
+            abort(403);
+        }
+
+        $surat = SuratTerbit::with('pengajuan')
+            ->where('qr_token', $token)
+            ->whereHas('pengajuan', function ($q) use ($warga) {
+                $q->where('warga_id', $warga->id);
+            })
+            ->firstOrFail();
+
         $relativePath = str_replace('storage/', '', $surat->file_pdf);
-
-        // Sekarang path = "surat-keluar/nama.pdf"
         $fullPath = storage_path('app/' . $relativePath);
 
         if (!file_exists($fullPath)) {
-            abort(404, 'File PDF tidak ditemukan di storage lokal');
+            abort(404);
         }
 
-        return response()->download($fullPath);
+        $namaFile = 'Surat-' . str_replace('/', '-', $surat->nomor_surat) . '.pdf';
+
+        return response()->download($fullPath, $namaFile);
     }
 }
