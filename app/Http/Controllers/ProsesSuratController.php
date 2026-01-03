@@ -121,6 +121,7 @@ class ProsesSuratController extends Controller
             'nomor_surat'       => $pengajuan->nomor_surat,
             'nama_ttd'          => $template->nama_ttd,
             'kepada'            => $pengajuan->kepada,
+            'diproses_oleh'     => $pengajuan->diproses_oleh,
             'file_pdf'          => 'storage/' . $filePath,
             'tanggal_pengajuan' => now()->setTimezone('Asia/Jakarta'),
             'qrcode_path'       => 'storage/' . $qrFileName,

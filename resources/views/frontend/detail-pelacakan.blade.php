@@ -10,6 +10,7 @@
         <p>Jenis Surat : {{ $surat->template->nama_template ?? '-' }}</p>
         <p>Nama : {{ $surat->nama }}</p>
         <p>NIK : {{ $surat->nik }}</p>
+        <p>Diproses Oleh : {{ $surat->diproses_oleh ?? '-' }}</p>
         <p>
             Status :
             <span class="px-2 py-1 rounded text-white

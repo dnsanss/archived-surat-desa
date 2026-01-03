@@ -27,6 +27,10 @@
             <p><strong>Nomor Surat:</strong>
                 {{ $surat->nomor_surat ?? '-' }}
             </p>
+            <p>
+                <strong>Diproses Oleh:</strong>
+                {{ $surat->diproses_oleh ?? '-' }}
+            </p>
 
 
             <hr>

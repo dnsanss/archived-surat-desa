@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('nomor_surat')->nullable();
             $table->longText('isi_surat')->nullable();
             $table->string('kepada')->nullable();
+            $table->string('diproses_oleh')->nullable();
             $table->date('tanggal_pengajuan')->nullable();
             $table->enum('status', ['menunggu', 'diproses', 'selesai'])->default('menunggu');
             $table->timestamps();
