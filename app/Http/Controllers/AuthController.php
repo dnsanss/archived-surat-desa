@@ -51,7 +51,7 @@ class AuthController extends Controller
         // CEK EMAIL SUDAH VERIFIKASI
         if (!$pengguna->email_verified_at) {
             return back()
-                ->withErrors(['email' => 'Silakan verifikasi email terlebih dahulu.']);
+                ->withErrors(['email' => 'Email belum terverifikasi. Silakan cek email Anda untuk melakukan verifikasi.']);
         }
 
         // LOGIN BERHASIL
@@ -106,6 +106,13 @@ class AuthController extends Controller
                     'nik' => 'NIK tidak terdaftar sebagai warga.'
                 ])
                 ->withInput();
+        }
+
+        //cek nama sesuai dengan NIK
+        if (strtolower(trim($warga->nama)) !== strtolower(trim($request->nama))) {
+            return back()->withErrors([
+                'nama' => 'Nama tidak sesuai dengan NIK yang terdaftar.'
+            ])->withInput();
         }
 
         //cek NIK sudah terdaftar di data_pengguna

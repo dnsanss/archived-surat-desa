@@ -37,7 +37,7 @@ class SuratKeluarResource extends Resource
     {
         return 'Surat-Surat';   // Grup yang sama dengan resource lain
     }
-    
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -47,6 +47,9 @@ class SuratKeluarResource extends Resource
                     ->required(),
                 TextInput::make('kepada')
                     ->label('Kepada')
+                    ->required(),
+                TextInput::make('diproses_oleh')
+                    ->label('Diproses Oleh')
                     ->required(),
                 TextInput::make('tanggal_pengajuan')
                     ->label('Tanggal Pengajuan')
@@ -87,6 +90,9 @@ class SuratKeluarResource extends Resource
                     ->searchable(),
                 TextColumn::make('kepada')
                     ->label('Kepada')
+                    ->searchable(),
+                TextColumn::make('diproses_oleh')
+                    ->label('Diproses Oleh')
                     ->searchable(),
                 TextColumn::make('tanggal_pengajuan')
                     ->label('Tanggal Pengajuan')

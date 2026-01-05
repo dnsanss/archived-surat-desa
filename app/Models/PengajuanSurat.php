@@ -20,6 +20,7 @@ class PengajuanSurat extends Model
         'nomor_surat',
         'isi_surat',
         'kepada',
+        'diproses_oleh',
         'tanggal_pengajuan',
         'status',
     ];

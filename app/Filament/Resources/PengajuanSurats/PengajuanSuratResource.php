@@ -35,7 +35,7 @@ class PengajuanSuratResource extends Resource
     {
         return 'Surat-Surat';
     }
-    
+
     //label sidebar
     protected static ?string $navigationLabel = 'Pengajuan Surat Warga';
     protected static ?string $pluralLabel = 'Pengajuan Surat Warga';
@@ -74,6 +74,10 @@ class PengajuanSuratResource extends Resource
 
                 TextInput::make('kepada')
                     ->label('Kepada')
+                    ->required(),
+
+                TextInput::make('diproses_oleh')
+                    ->label('Diproses Oleh')
                     ->required(),
 
                 DatePicker::make('tanggal_pengajuan')
@@ -124,6 +128,7 @@ class PengajuanSuratResource extends Resource
                     ->label('Status')->searchable(),
                 TextColumn::make('nik')->label('NIK')->searchable(),
                 TextColumn::make('nama')->label('Nama Warga')->searchable(),
+                TextColumn::make('diproses_oleh')->label('Diproses Oleh')->searchable(),
                 TextColumn::make('template.nama_template')->label('Jenis Surat')->searchable(),
                 TextColumn::make('nomor_surat')->label('Nomor Surat')->searchable(),
                 TextColumn::make('tanggal_pengajuan')

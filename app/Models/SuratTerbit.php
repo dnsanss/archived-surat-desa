@@ -14,6 +14,7 @@ class SuratTerbit extends Model
         'warga_id',
         'nomor_surat',
         'kepada',
+        'diproses_oleh',
         'file_pdf',
         'tanggal_pengajuan',
         'qrcode_path',

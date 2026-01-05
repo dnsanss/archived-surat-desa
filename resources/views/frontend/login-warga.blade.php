@@ -41,7 +41,7 @@
             </div>
 
             <button class="w-full bg-blue-600 text-white py-2 rounded">
-                Login
+                Masuk
             </button>
         </form>
 

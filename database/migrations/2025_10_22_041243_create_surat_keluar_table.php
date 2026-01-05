@@ -21,6 +21,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('nomor_surat');
             $table->string('kepada');
+            $table->string('diproses_oleh')->nullable();
             $table->string('file_pdf');
             $table->date('tanggal_pengajuan');
             $table->longText('qrcode_path')->nullable();

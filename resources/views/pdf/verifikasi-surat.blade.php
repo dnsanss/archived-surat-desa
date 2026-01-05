@@ -138,13 +138,15 @@
         <div class="info">
             <p>Nomor Surat: <Strong>{{ $surat->nomor_surat }}</Strong></p>
             <p>Nama Surat: <Strong>{{ $template->nama_template ?? '-' }}</Strong></p>
-            <p>Pengaju Surat: <Strong>{{ $warga->nama ?? '-' }}</Strong></p>
-            <p>Nama Penandatangan: <Strong>Sumali</Strong></p>
+            <p>Nama Pengaju Surat: <Strong>{{ $warga->nama ?? '-' }}</Strong></p>
+            <p>Nama Penandatangan: <Strong>{{ $template->nama_ttd ?? '-'}}</Strong></p>
             <p>Jabatan: <Strong>Kepala Desa</Strong></p>
             <p>Instansi: <Strong>Pemerintah Desa Karangasem</Strong></p>
+            <p>Diproses Oleh: <Strong>{{ $surat->diproses_oleh ?? '-' }}</Strong></p>
             <p>Tanggal Ditandatangani:<Strong>
                     {{ \Carbon\Carbon::parse($surat->tanggal_pengajuan)->translatedFormat('l, d F Y') }}
                 </Strong></p>
+            <p>Pukul : <Strong>{{ $surat->created_at->format('H:i') }} WIB</Strong></p>
         </div>
 
         <hr>
