@@ -8,6 +8,7 @@
     @vite('resources/css/app.css')
     <script src="//unpkg.com/alpinejs" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital@0;1&family=Karla:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
 
@@ -33,12 +34,10 @@
                         Struktur Pemerintahan Desa
                     </a>
                     <a href="{{ route('berita') }}"
-                    @class([
-                        'hover:text-green-600',
-                        'text-green-700 border-b-2' => request()->routeIs('berita'),
-                    ])>
-                    Berita
-                </a>
+                        @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('berita'),
+                        ])>
+                        Berita
+                    </a>
                     <a href="{{ route('pengajuan-surat') }}"
                         @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('pengajuan-surat'),
                         ])>
@@ -87,12 +86,10 @@
                     Struktur Pemerintahan Desa
                 </a>
                 <a href="{{ route('berita') }}"
-                @class([
-                    'hover:text-green-600',
-                    'text-green-700 border-b-2' => request()->routeIs('berita'),
-                ])>
-                Berita
-            </a>
+                    @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('berita'),
+                    ])>
+                    Berita
+                </a>
                 </a>
                 <a href="{{ route('pengajuan-surat') }}"
                     @class([ 'hover:text-green-600' , 'text-green-700 border-b-2'=> request()->routeIs('pengajuan-surat'),
