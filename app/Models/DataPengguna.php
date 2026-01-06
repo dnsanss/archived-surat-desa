@@ -14,7 +14,7 @@ class DataPengguna extends Authenticatable
     protected $keyType = 'string';
 
     protected $fillable = [
-        'kode_pengguna',
+        'id',
         'nama',
         'nik',
         'email',

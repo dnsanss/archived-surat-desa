@@ -14,27 +14,47 @@ class Berita extends Model
         'isi',
         'gambar',
         'tanggal_publikasi',
-        'penulis'
     ];
 
     protected static function boot()
     {
         parent::boot();
 
-        // menghapus file gambar saat data berita dihapus
+        //Hapus gambar saat berita dihapus
         static::deleting(function ($berita) {
-            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
-                Storage::disk('public')->delete($berita->gambar);
+
+            if (!$berita->gambar) {
+                return;
+            }
+
+            if (Storage::disk('supabase')->exists($berita->gambar)) {
+                Storage::disk('supabase')->delete($berita->gambar);
+
+                logger()->info('Gambar berita dihapus dari Supabase', [
+                    'path' => $berita->gambar,
+                ]);
+            } else {
+                logger()->warning('Gambar berita tidak ditemukan di Supabase', [
+                    'path' => $berita->gambar,
+                ]);
             }
         });
 
-        // menghapus file gambar lama saat data berita diperbarui dengan gambar barustatic::updating(function ($berita) {
+        //Hapus gambar lama saat update gambar baru
         static::updating(function ($berita) {
-            if ($berita->isDirty('gambar')) {
-                $oldImage = $berita->getOriginal('gambar');
-                if ($oldImage && Storage::disk('public')->exists($oldImage)) {
-                    Storage::disk('public')->delete($oldImage);
-                }
+
+            if (!$berita->isDirty('gambar')) {
+                return;
+            }
+
+            $oldImage = $berita->getOriginal('gambar');
+
+            if ($oldImage && Storage::disk('supabase')->exists($oldImage)) {
+                Storage::disk('supabase')->delete($oldImage);
+
+                logger()->info('Gambar lama berita dihapus dari Supabase', [
+                    'path' => $oldImage,
+                ]);
             }
         });
     }

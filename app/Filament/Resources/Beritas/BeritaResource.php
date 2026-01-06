@@ -11,8 +11,6 @@ use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
 use Filament\Actions\DeleteAction;
 use Filament\Support\Icons\Heroicon;
-use Filament\Schemas\Components\View;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -21,8 +19,6 @@ use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Beritas\Pages\EditBerita;
 use App\Filament\Resources\Beritas\Pages\ListBeritas;
 use App\Filament\Resources\Beritas\Pages\CreateBerita;
-use App\Filament\Resources\Beritas\Schemas\BeritaForm;
-use App\Filament\Resources\Beritas\Tables\BeritasTable;
 use Filament\Forms\Components\RichEditor;
 
 class BeritaResource extends Resource
@@ -37,7 +33,7 @@ class BeritaResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Informasi Desa'; 
+        return 'Informasi Desa';
     }
 
     // Form Schema
@@ -67,11 +63,13 @@ class BeritaResource extends Resource
 
                 FileUpload::make('gambar')
                     ->label('Gambar Berita')
-                    ->disk('public')
+                    ->disk('supabase')
                     ->directory('berita')
+                    ->visibility('public')
                     ->image()
                     ->imageEditor()
                     ->maxSize(2048)
+                    ->preserveFilenames()
                     ->nullable(),
 
                 DatePicker::make('tanggal_publikasi')
@@ -91,7 +89,7 @@ class BeritaResource extends Resource
             ->columns([
                 ImageColumn::make('gambar')
                     ->label('Gambar')
-                    ->disk('public'),
+                    ->disk('supabase'),
 
                 TextColumn::make('judul')
                     ->label('Judul')

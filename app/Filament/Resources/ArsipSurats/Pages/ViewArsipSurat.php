@@ -23,20 +23,23 @@ class ViewArsipSurat extends ViewRecord
                 ->label('Download Dokumen')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
-                ->url(fn() => route('surat-masuk.view', ['filename' => basename($this->record->dokumen)]))
+                ->url(fn() => route(
+                    'surat-masuk.download',
+                    ['path' => $this->record->dokumen]
+                ))
                 ->openUrlInNewTab(),
+
             Action::make('back')
                 ->label('Kembali')
                 ->icon('heroicon-o-arrow-left')
                 ->url(fn() => static::getResource()::getUrl('index')),
-
         ];
     }
 
     protected function getViewData(): array
     {
         return [
-            'fileUrl' => Storage::url($this->record->dokumen),
+            'filePath' => $this->record->dokumen,
         ];
     }
 

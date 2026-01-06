@@ -13,15 +13,30 @@ class ArsipSurat extends Model
         'nomor_surat',
         'nama_surat',
         'perihal',
-        'dokumen'
+        'dokumen',
     ];
+
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function ($arsip) {
-            if ($arsip->dokumen && Storage::disk('local')->exists($arsip->dokumen)) {
-                Storage::disk('local')->delete($arsip->dokumen);
+
+            if (!$arsip->dokumen) {
+                return;
+            }
+
+            // HAPUS FILE LANGSUNG DARI SUPABASE
+            if (Storage::disk('supabase')->exists($arsip->dokumen)) {
+                Storage::disk('supabase')->delete($arsip->dokumen);
+
+                logger()->info('Arsip surat dihapus dari Supabase', [
+                    'path' => $arsip->dokumen,
+                ]);
+            } else {
+                logger()->warning('File arsip tidak ditemukan di Supabase', [
+                    'path' => $arsip->dokumen,
+                ]);
             }
         });
     }

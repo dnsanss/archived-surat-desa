@@ -13,7 +13,7 @@
         <div>
             <br>
             <iframe
-                src="{{ route('surat-keluar.view', ['filename' => basename($record->file_pdf)]) }}"
+                src="{{ route('surat-keluar.view', ['path' => $filePath]) }}"
                 width="100%"
                 height="750px"
                 style="border:1px solid #ccc; border-radius:8px;">
