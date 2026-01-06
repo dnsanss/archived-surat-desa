@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('pengajuan_surat', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('warga_id')->constrained('data_warga')->cascadeOnDelete()->nullable()->after('id');
+            $table->foreignId('warga_id')
+                ->nullable()
+                ->constrained('data_warga')
+                ->cascadeOnDelete();
             $table->string('nik', 16);
             $table->string('nama');
             $table->foreignId('template_id')->constrained('templates_surat')->cascadeOnDelete();
@@ -23,7 +26,7 @@ return new class extends Migration
             $table->string('kepada')->nullable();
             $table->string('diproses_oleh')->nullable();
             $table->date('tanggal_pengajuan')->nullable();
-            $table->enum('status', ['menunggu', 'diproses', 'selesai'])->default('menunggu');
+            $table->string('status', 20)->default('menunggu');
             $table->timestamps();
         });
     }
