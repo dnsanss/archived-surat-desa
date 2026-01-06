@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('surat_terbit', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pengajuan_id')->constrained('pengajuan_surat')->cascadeOnDelete();
-            $table->unsignedBigInteger('warga_id')->nullable();
-            $table->foreign('warga_id')
-                ->references('id')
-                ->on('data_warga')
-                ->onDelete('cascade');
+            $table->foreignId('warga_id')
+                ->nullable()
+                ->constrained('data_warga')
+                ->cascadeOnDelete();
             $table->string('nomor_surat');
             $table->string('kepada');
             $table->string('diproses_oleh')->nullable();

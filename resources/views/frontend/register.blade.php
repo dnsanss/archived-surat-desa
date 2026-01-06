@@ -1,62 +1,113 @@
-<!DOCTYPE html>
-<html lang="id">
+@include('layouts.navbar')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Registrasi</title>
-    @vite('resources/css/app.css')
-</head>
+<div class="min-h-screen bg-green-50 flex items-center justify-center px-4 pt-24 pb-10">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+        <div class="flex justify-center mb-4">
+            <img src="{{ asset('assets/images/logo-kabpas.png') }}"
+                alt="Logo Kabupaten Pasuruan"
+                class="w-20 h-20 object-contain">
+        </div>
 
-    <div class="bg-white w-full max-w-md p-6 rounded-lg shadow">
-
-        <h2 class="text-2xl font-bold text-center mb-4">Registrasi</h2>
+        <h2 class="text-2xl font-bold text-center text-green-700 mb-1">
+            Registrasi Akun
+        </h2>
+        <p class="text-center text-gray-600 mb-6 text-sm">
+            Daftar untuk mengakses layanan
+            <span class="font-semibold text-green-700">SISEKAR</span>
+        </p>
 
         @if ($errors->any())
-        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
-            <ul class="text-sm">
+        <div class="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg mb-4 text-sm">
+            <ul class="list-disc pl-5 space-y-1">
                 @foreach ($errors->all() as $error)
-                <li>• {{ $error }}</li>
+                <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
         @endif
-        <form method="POST" action="{{ route('register.submit') }}" class="space-y-3">
+
+        <form method="POST" action="{{ route('register.submit') }}" class="space-y-4">
             @csrf
 
             <input type="text" name="nama" placeholder="Nama Lengkap"
-                class="w-full border rounded px-3 py-2" required>
+                class="w-full rounded-xl border border-gray-300 px-4 py-2
+                       focus:outline-none focus:ring-2 focus:ring-green-600"
+                required>
 
             <input type="text" name="nik" placeholder="NIK"
-                class="w-full border rounded px-3 py-2" required>
+                class="w-full rounded-xl border border-gray-300 px-4 py-2
+                       focus:outline-none focus:ring-2 focus:ring-green-600"
+                required>
 
             <input type="email" name="email" placeholder="Email"
-                class="w-full border rounded px-3 py-2" required>
+                class="w-full rounded-xl border border-gray-300 px-4 py-2
+                       focus:outline-none focus:ring-2 focus:ring-green-600"
+                required>
 
-            <input type="text" name="nomor_hp" placeholder="Nomor HP"
-                class="w-full border rounded px-3 py-2" required>
+            <input type="text" name="nomor_hp" placeholder="Nomor WhatsApp"
+                class="w-full rounded-xl border border-gray-300 px-4 py-2
+                       focus:outline-none focus:ring-2 focus:ring-green-600"
+                required>
 
-            <input type="password" name="password" placeholder="Password"
-                class="w-full border rounded px-3 py-2" required>
+            {{-- PASSWORD --}}
+            <div class="relative">
+                <input type="password" id="reg_password" name="password"
+                    placeholder="Password"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-2 pr-12
+                           focus:outline-none focus:ring-2 focus:ring-green-600"
+                    required>
 
-            <input type="password" name="password_confirmation"
-                placeholder="Konfirmasi Password"
-                class="w-full border rounded px-3 py-2" required>
+                <span onclick="togglePassword('reg_password', this)"
+                    class="material-icons absolute right-4 top-1/2 -translate-y-1/2
+                           cursor-pointer text-gray-500">
+                    visibility
+                </span>
+            </div>
 
-            <button class="w-full bg-green-600 text-white py-2 rounded">
+            {{-- KONFIRMASI PASSWORD --}}
+            <div class="relative">
+                <input type="password" id="reg_password_confirm"
+                    name="password_confirmation"
+                    placeholder="Konfirmasi Password"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-2 pr-12
+                           focus:outline-none focus:ring-2 focus:ring-green-600"
+                    required>
+
+                <span onclick="togglePassword('reg_password_confirm', this)"
+                    class="material-icons absolute right-4 top-1/2 -translate-y-1/2
+                           cursor-pointer text-gray-500">
+                    visibility
+                </span>
+            </div>
+
+            <button
+                class="w-full bg-green-700 hover:bg-green-800
+                       text-white font-semibold py-3 rounded-xl transition">
                 Daftar
             </button>
         </form>
 
-        <p class="text-center mt-4 text-sm">
+        <p class="text-center mt-5 text-sm text-gray-600">
             Sudah punya akun?
-            <a href="{{ route('login') }}" class="text-blue-600 font-semibold">
+            <a href="{{ route('login') }}"
+                class="text-green-700 font-semibold hover:underline">
                 Login
             </a>
         </p>
     </div>
+</div>
 
-</body>
+<script>
+    function togglePassword(inputId, icon) {
+        const input = document.getElementById(inputId);
 
-</html>
+        if (input.type === "password") {
+            input.type = "text";
+            icon.textContent = "visibility_off";
+        } else {
+            input.type = "password";
+            icon.textContent = "visibility";
+        }
+    }
+</script>

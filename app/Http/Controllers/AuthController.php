@@ -19,42 +19,30 @@ class AuthController extends Controller
 
     public function loginSubmit(Request $request)
     {
-        // VALIDASI + PESAN INDONESIA
-        $request->validate(
-            [
-                'email' => 'required|email',
-                'password' => 'required',
-            ],
-            [
-                'email.required' => 'Email wajib diisi.',
-                'email.email' => 'Format email tidak valid.',
-                'password.required' => 'Password wajib diisi.',
-            ]
-        );
+        $request->validate([
+            'nama' => 'required|string',
+            'password' => 'required',
+        ], [
+            'nama.required' => 'Nama wajib diisi',
+            'password.required' => 'Password wajib diisi',
+        ]);
 
-        // CEK EMAIL TERDAFTAR
-        $pengguna = DataPengguna::where('email', $request->email)->first();
+        // CARI NAMA SECARA PERSIS (CASE-SENSITIVE)
+        $pengguna = DataPengguna::where('nama', $request->nama)->first();
 
         if (!$pengguna) {
-            return back()
-                ->withErrors(['email' => 'Data pengguna tidak ditemukan.'])
-                ->withInput();
+            return back()->withErrors([
+                'nama' => 'Data pengguna tidak ditemukan'
+            ])->withInput();
         }
 
-        // CEK PASSWORD
         if (!Hash::check($request->password, $pengguna->password)) {
-            return back()
-                ->withErrors(['password' => 'Password yang Anda masukkan salah.'])
-                ->withInput();
+            return back()->withErrors([
+                'password' => 'Password salah'
+            ])->withInput();
         }
 
-        // CEK EMAIL SUDAH VERIFIKASI
-        if (!$pengguna->email_verified_at) {
-            return back()
-                ->withErrors(['email' => 'Email belum terverifikasi. Silakan cek email Anda untuk melakukan verifikasi.']);
-        }
-
-        // LOGIN BERHASIL
+        // Login sukses
         session([
             'pengguna_login' => true,
             'pengguna_id'    => $pengguna->id,
@@ -63,7 +51,6 @@ class AuthController extends Controller
 
         return redirect()->route('pengajuan-surat');
     }
-
 
     //Register
     public function register()
@@ -98,7 +85,9 @@ class AuthController extends Controller
         );
 
         //cek NIK terdaftar di data_warga
-        $warga = DataWarga::where('nik', $request->nik)->first();
+        $warga = DataWarga::where('nik', $request->nik)
+            ->where('nama', $request->nama)
+            ->first();
 
         if (!$warga) {
             return back()
