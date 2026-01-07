@@ -1,10 +1,10 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Http\Request;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProsesSuratController;
@@ -14,14 +14,14 @@ use App\Http\Controllers\WargaPengajuanController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\VerifikasiSuratController;
 use App\Http\Controllers\PenyimpananSuratController;
+use App\Http\Controllers\StrukturPemerintahanController;
 
 // import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
 
-// route untuk halaman struktur pemerintahan
-Route::get('/struktur-pemerintahan', function () {
-    return view('frontend.struktur-pemerintahan');
-})->name('struktur-pemerintahan');
+// route untuk halaman struktur pemerintahan dengan data dari database
+Route::get('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index']);
+Route::post('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index'])->name('struktur-pemerintahan');
 
 // berita
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
