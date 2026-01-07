@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataWarga;
 use App\Models\SuratTerbit;
-use App\Models\TemplateSurat;
-use App\Models\PengajuanSurat;
-use App\Http\Controllers\Controller;
+use App\Models\DataWarga;
 
 class VerifikasiSuratController extends Controller
 {
-    // route untuk menampilkan halaman verifikasi surat
+    // Halaman verifikasi surat
     public function show($token)
     {
-        // Cari surat berdasarkan token QR
         $surat = SuratTerbit::where('qr_token', $token)->first();
 
         if (!$surat) {
@@ -23,34 +19,36 @@ class VerifikasiSuratController extends Controller
             ]);
         }
 
-        // Ambil data pengajuan & relasinya
         $pengajuan = $surat->pengajuan;
-        $template = $pengajuan ? $pengajuan->template : null;
-        $warga = $pengajuan
-            ? \App\Models\DataWarga::where('nik', $pengajuan->nik)->first()
+        $template  = $pengajuan?->template;
+        $warga     = $pengajuan
+            ? DataWarga::where('nik', $pengajuan->nik)->first()
             : null;
 
         return view('pdf.verifikasi-surat', [
-            'valid' => true,
-            'message' => null,
-            'surat' => $surat,
+            'valid'    => true,
+            'message'  => null,
+            'surat'    => $surat,
             'template' => $template,
-            'warga' => $warga,
+            'warga'    => $warga,
         ]);
     }
 
-    // route untuk download file surat terverifikasi
+    // Download PDF surat terverifikasi
     public function download($token)
     {
         $surat = SuratTerbit::where('qr_token', $token)->firstOrFail();
 
-        $filePath = str_replace('storage/', '', $surat->file_pdf); // hapus prefix agar sesuai dengan disk lokal
-        $fullPath = storage_path('app/' . $filePath);
+        // PATH SUDAH RELATIF (tanpa storage/)
+        $fullPath = storage_path('app/' . $surat->file_pdf);
 
         if (!file_exists($fullPath)) {
-            return back()->with('error', 'File tidak ditemukan.');
+            abort(404, 'File surat tidak ditemukan.');
         }
 
-        return response()->download($fullPath);
+        // Nama file aman (tidak mengandung / atau \)
+        $namaFile = 'Surat-' . str_replace(['/', '\\'], '-', $surat->nomor_surat) . '.pdf';
+
+        return response()->download($fullPath, $namaFile);
     }
 }

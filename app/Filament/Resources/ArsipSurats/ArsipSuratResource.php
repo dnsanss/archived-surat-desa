@@ -59,7 +59,7 @@ class ArsipSuratResource extends Resource
 
             FileUpload::make('dokumen')
                 ->label('Upload Dokumen')
-                ->disk('local')
+                ->disk('supabase')
                 ->directory('surat-masuk')
                 ->acceptedFileTypes([
                     'application/pdf',
@@ -69,7 +69,8 @@ class ArsipSuratResource extends Resource
                     'text/html',
                     'application/vnd.oasis.opendocument.text',
                 ])
-                ->visibility('private')
+                ->visibility('public')
+                ->preserveFilenames()
                 ->required(),
         ]);
     }

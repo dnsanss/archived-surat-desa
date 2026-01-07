@@ -27,32 +27,25 @@ class SuratTerbit extends Model
 
         static::deleting(function ($surat) {
 
-            // 🧩 Hapus file PDF
-            if (!empty($surat->file_pdf)) {
-                // Hapus "storage/" dari awal path agar cocok dengan lokasi storage/app
-                $pathPdf = str_replace('storage/', '', trim($surat->file_pdf));
+            $disk = Storage::disk('supabase');
 
-                if (Storage::disk('local')->exists($pathPdf)) {
-                    Storage::disk('local')->delete($pathPdf);
-                    logger("✅ File PDF dihapus: $pathPdf");
+            // 🧩 Hapus file PDF di Supabase
+            if (!empty($surat->file_pdf)) {
+                if ($disk->exists($surat->file_pdf)) {
+                    $disk->delete($surat->file_pdf);
+                    logger("✅ Supabase PDF dihapus: {$surat->file_pdf}");
                 } else {
-                    logger("⚠️ File PDF tidak ditemukan: $pathPdf");
+                    logger("⚠️ Supabase PDF tidak ditemukan: {$surat->file_pdf}");
                 }
             }
 
-            // 🧩 Hapus file QR Code
+            // 🧩 Hapus QR Code di Supabase
             if (!empty($surat->qrcode_path)) {
-                // Hapus "storage/" dari awal path juga
-                $qrPath = str_replace('storage/', '', trim($surat->qrcode_path));
-
-                if (Storage::disk('public')->exists($qrPath)) {
-                    Storage::disk('public')->delete($qrPath);
-                    logger("✅ File QR dihapus (public): $qrPath");
-                } elseif (Storage::disk('local')->exists($qrPath)) {
-                    Storage::disk('local')->delete($qrPath);
-                    logger("✅ File QR dihapus (local): $qrPath");
+                if ($disk->exists($surat->qrcode_path)) {
+                    $disk->delete($surat->qrcode_path);
+                    logger("✅ Supabase QR Code dihapus: {$surat->qrcode_path}");
                 } else {
-                    logger("⚠️ File QR tidak ditemukan: $qrPath");
+                    logger("⚠️ Supabase QR Code tidak ditemukan: {$surat->qrcode_path}");
                 }
             }
         });

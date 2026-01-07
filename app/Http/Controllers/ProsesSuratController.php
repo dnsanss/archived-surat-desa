@@ -41,14 +41,13 @@ class ProsesSuratController extends Controller
         $template  = TemplateSurat::findOrFail($pengajuan->template_id);
         $warga     = DataWarga::where('nik', $pengajuan->nik)->firstOrFail();
 
-        // Format data warga untuk tampilan di isi surat
+        // Format data warga
         $warga->tanggal_lahir = Carbon::parse($warga->tanggal_lahir)->translatedFormat('d F Y');
         $warga->jenis_kelamin = $warga->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan';
 
-        // Ambil isi surat final yang sudah disimpan / diedit admin
+        // Ambil isi surat final
         $isiSuratFinal = $pengajuan->isi_surat;
 
-        // Jika kosong (fallback), generate dari template
         if (empty($isiSuratFinal)) {
             $isiSuratFinal = SuratHelper::replaceVariables(
                 $template->isi_template,
@@ -56,13 +55,8 @@ class ProsesSuratController extends Controller
             );
         }
 
-        // Ganti placeholder spesifik (nomor_surat, kepada, nama_template)
         $isiSuratFinal = str_replace(
-            [
-                '{{nomor_surat}}',
-                '{{kepada}}',
-                '{{nama_template}}',
-            ],
+            ['{{nomor_surat}}', '{{kepada}}', '{{nama_template}}'],
             [
                 $pengajuan->nomor_surat ?? '-',
                 $pengajuan->kepada ?? '-',
@@ -71,33 +65,34 @@ class ProsesSuratController extends Controller
             $isiSuratFinal
         );
 
-        // Simpan kembali isi_surat final ke pengajuan (agar persistent)
-        $pengajuan->isi_surat = $isiSuratFinal;
-        $pengajuan->save();
+        $pengajuan->update(['isi_surat' => $isiSuratFinal]);
 
-        // Pastikan public storage symlink ada
-        if (!file_exists(public_path('storage'))) {
-            Artisan::call('storage:link');
-        }
-
-        // Generate token verifikasi
+        // Generate token QR
         $qrToken = Str::uuid();
         $urlVerifikasi = route('verifikasi.surat', ['token' => $qrToken]);
 
-        // Generate QR Code (PNG)
+        // Generate QR Code
         $qrCode = new QrCode($urlVerifikasi);
         $qrCode->setSize(150);
         $writer = new PngWriter();
 
-        // Simpan file QR ke storage/app/public/qrcodes
+        // PATH QR
         $qrFileName = 'qr_' . $pengajuan->id . '_' . time() . '.png';
         $qrPath = 'qrcodes/' . $qrFileName;
-        Storage::disk('local')->put($qrPath, $writer->write($qrCode)->getString());
 
-        // Base64 untuk dimasukkan ke PDF
-        $qrBase64 = 'data:image/png;base64,' . base64_encode(Storage::disk('local')->get($qrPath));
+        Storage::disk('supabase')->put(
+            'qrcodes/' . $qrFileName,
+            $writer->write($qrCode)->getString(),
+            'public'
+        );
 
-        // Generate PDF menggunakan isi surat final
+
+        // Base64 QR untuk PDF
+        $qrBase64 = 'data:image/png;base64,' . base64_encode(
+            Storage::disk('supabase')->get($qrPath)
+        );
+
+        // Generate PDF
         $pdf = Pdf::loadView('pdf.template-surat', [
             'nama_template' => $template->nama_template,
             'isi_template'  => $isiSuratFinal,
@@ -109,30 +104,34 @@ class ProsesSuratController extends Controller
                 'isRemoteEnabled' => true,
             ]);
 
-        // Simpan PDF ke storage/app/public/surat-keluar
+        // PATH PDF
         $fileName = 'surat_' . $warga->nik . '_' . now()->format('YmdHis') . '.pdf';
         $filePath = 'surat-keluar/' . $fileName;
-        Storage::disk('local')->put($filePath, $pdf->output());
 
-        // Simpan metadata surat ke DB (path publikable via /storage/...)
+        Storage::disk('supabase')->put(
+            $filePath,
+            $pdf->output(),
+            'public'
+        );
+
+        // Simpan metadata ke DB (TANPA awalan storage/)
         SuratTerbit::create([
             'pengajuan_id'      => $pengajuan->id,
             'warga_id'          => $pengajuan->warga_id,
             'nomor_surat'       => $pengajuan->nomor_surat,
-            'nama_ttd'          => $template->nama_ttd,
             'kepada'            => $pengajuan->kepada,
             'diproses_oleh'     => $pengajuan->diproses_oleh,
-            'file_pdf'          => 'storage/' . $filePath,
+            'file_pdf'          => $filePath,      // ✅
             'tanggal_pengajuan' => now()->setTimezone('Asia/Jakarta'),
-            'qrcode_path'       => 'storage/' . $qrFileName,
+            'qrcode_path'       => $qrPath,        // ✅
             'qr_token'          => $qrToken,
         ]);
 
-        // Update status pengajuan
+        // Update status
         $pengajuan->update(['status' => 'selesai']);
 
-        // Redirect ke Filament
-        return redirect()->route('filament.karangasem.resources.surat-keluars.index')
-            ->with('success', '✅ Surat berhasil diterbitkan dan disimpan ke arsip.');
+        return redirect()
+            ->route('filament.karangasem.resources.surat-keluars.index')
+            ->with('success', '✅ Surat berhasil diterbitkan.');
     }
 }

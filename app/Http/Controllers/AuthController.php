@@ -119,7 +119,7 @@ class AuthController extends Controller
 
         //simpan data pengguna
         $user = DataPengguna::create([
-            'kode_pengguna' => random_int(100000, 999999),
+            'id' => random_int(100000, 999999),
             'nama'      => $request->nama,
             'nik'       => $request->nik,
             'email'     => $request->email,

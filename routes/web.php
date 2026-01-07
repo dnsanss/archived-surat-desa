@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
@@ -25,18 +26,46 @@ Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.judul');
 
 // route untuk melihat arsip surat
-Route::get('/surat-masuk/view/{filename}', function ($filename) {
-    $path = storage_path('app/surat-masuk/' . $filename);
+Route::get('/surat-masuk/view', function () {
 
-    if (!file_exists($path)) {
+    $path = request()->query('path');
+
+    if (!$path) {
+        abort(400, 'Path file tidak valid.');
+    }
+
+    if (!Storage::disk('supabase')->exists($path)) {
         abort(404, 'File tidak ditemukan.');
     }
 
-    $mimeType = mime_content_type($path);
-    return response()->file($path, [
-        'Content-Type' => $mimeType,
+    $file = Storage::disk('supabase')->get($path);
+
+    return response($file, 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline',
     ]);
 })->name('surat-masuk.view')->middleware('auth');
+
+// route untuk download arsip surat
+Route::get('/surat-masuk/download', function () {
+
+    $path = request()->query('path');
+
+    if (!$path) {
+        abort(400, 'Path file tidak valid.');
+    }
+
+    if (!Storage::disk('supabase')->exists($path)) {
+        abort(404, 'File tidak ditemukan.');
+    }
+
+    $file = Storage::disk('supabase')->get($path);
+
+    return response($file, 200, [
+        'Content-Type'        => 'application/pdf',
+        'Content-Disposition' => 'attachment; filename="' . basename($path) . '"',
+    ]);
+})->name('surat-masuk.download')->middleware('auth');
 
 // import controller pengajuan surat
 Route::get('/pengajuan-surat', [FrontendController::class, 'pengajuanSurat'])
@@ -53,18 +82,47 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // route untuk view dokumen di surat keluar
-Route::get('/surat-keluar/view/{filename}', function ($filename) {
-    $path = storage_path('app/surat-keluar/' . $filename);
+Route::get('/surat-keluar/view', function () {
 
-    if (!file_exists($path)) {
+    $path = request()->query('path');
+
+    if (!$path) {
+        abort(400, 'Path file tidak valid.');
+    }
+
+    // ambil file dari Supabase
+    if (!Storage::disk('supabase')->exists($path)) {
         abort(404, 'File tidak ditemukan.');
     }
 
-    $mimeType = mime_content_type($path);
-    return response()->file($path, [
-        'Content-Type' => $mimeType,
+    $file = Storage::disk('supabase')->get($path);
+
+    return response($file, 200, [
+        'Content-Type'        => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="' . basename($path) . '"',
     ]);
 })->name('surat-keluar.view')->middleware('auth');
+
+// route untuk download dokumen di surat keluar
+Route::get('/surat-keluar/download', function () {
+
+    $path = request()->query('path');
+
+    if (!$path) {
+        abort(400, 'Path file tidak valid.');
+    }
+
+    if (!Storage::disk('supabase')->exists($path)) {
+        abort(404, 'File tidak ditemukan.');
+    }
+
+    $file = Storage::disk('supabase')->get($path);
+
+    return response($file, 200, [
+        'Content-Type'        => 'application/pdf',
+        'Content-Disposition' => 'attachment; filename="' . basename($path) . '"',
+    ]);
+})->name('surat-keluar.download')->middleware('auth');
 
 // route untuk verifikasi surat via QR Code
 Route::get('/verifikasi-surat/{token}', [VerifikasiSuratController::class, 'show'])

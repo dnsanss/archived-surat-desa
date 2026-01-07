@@ -11,7 +11,6 @@ class PenyimpananSuratController extends Controller
 {
     public function index()
     {
-        // 1. Cek login pengguna
         if (!session()->has('data_pengguna')) {
             return redirect()->route('login')
                 ->with('error', 'Silakan login terlebih dahulu.');
@@ -19,15 +18,12 @@ class PenyimpananSuratController extends Controller
 
         $pengguna = session('data_pengguna');
 
-        // 2. Ambil data warga berdasarkan NIK pengguna
         $warga = DataWarga::where('nik', $pengguna->nik)->first();
-
         if (!$warga) {
             return redirect()->route('pengajuan-surat')
                 ->with('error', 'Data warga belum terverifikasi.');
         }
 
-        // 3. Ambil surat terbit milik warga tersebut
         $suratTersimpan = SuratTerbit::with(['pengajuan.template'])
             ->whereHas('pengajuan', function ($q) use ($warga) {
                 $q->where('warga_id', $warga->id);
@@ -71,17 +67,19 @@ class PenyimpananSuratController extends Controller
 
     public function download($token)
     {
+        // Pastikan login
         if (!session()->has('data_pengguna')) {
-            abort(403);
+            abort(403, 'Akses ditolak.');
         }
 
         $pengguna = session('data_pengguna');
 
         $warga = DataWarga::where('nik', $pengguna->nik)->first();
         if (!$warga) {
-            abort(403);
+            abort(403, 'Data warga tidak valid.');
         }
 
+        // Ambil surat berdasarkan token & kepemilikan
         $surat = SuratTerbit::with('pengajuan')
             ->where('qr_token', $token)
             ->whereHas('pengajuan', function ($q) use ($warga) {
@@ -89,15 +87,20 @@ class PenyimpananSuratController extends Controller
             })
             ->firstOrFail();
 
-        $relativePath = str_replace('storage/', '', $surat->file_pdf);
-        $fullPath = storage_path('app/' . $relativePath);
+        // Path RELATIF di Supabase
+        $path = $surat->file_pdf;
 
-        if (!file_exists($fullPath)) {
-            abort(404);
+        if (!Storage::disk('supabase')->exists($path)) {
+            abort(404, 'File PDF tidak ditemukan di storage.');
         }
 
-        $namaFile = 'Surat-' . str_replace('/', '-', $surat->nomor_surat) . '.pdf';
+        // Nama file aman
+        $namaFile = 'Surat-' . str_replace(['/', '\\'], '-', $surat->nomor_surat) . '.pdf';
 
-        return response()->download($fullPath, $namaFile);
+        // DOWNLOAD DARI SUPABASE
+        return response(Storage::disk('supabase')->get($path), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => "attachment; filename=\"{$namaFile}\"",
+        ]);
     }
 }
