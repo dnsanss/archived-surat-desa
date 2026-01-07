@@ -16,20 +16,18 @@ class ForgotPasswordController extends Controller
         return view('frontend.reset-password');
     }
 
+    // KIRIM LINK RESET PASSWORD
     public function sendLink(Request $request)
     {
+        // VALIDASI INPUT
         $request->validate([
             'email' => 'required|email'
         ]);
 
-        // Tambahkan trim() untuk menghapus spasi yang tidak sengaja terketik
         $emailInput = trim($request->email);
 
         // Cari user berdasarkan email
         $user = DataPengguna::where('email', $emailInput)->first();
-
-        // Debugging: Jika masih tidak terdeteksi, aktifkan baris di bawah ini untuk melihat isi $user
-        // dd($user); 
 
         if (!$user) {
             return back()->withErrors([
@@ -37,7 +35,7 @@ class ForgotPasswordController extends Controller
             ]);
         }
 
-        // Jika user ditemukan tapi password kosong (biasanya login via Google/OAuth)
+        // Cek apakah user terdaftar melalui Google Login
         if (empty($user->password)) {
             return back()->withErrors([
                 'email' => 'Akun ini terdaftar melalui Google Login. Silakan login langsung menggunakan tombol Google.'
@@ -45,6 +43,7 @@ class ForgotPasswordController extends Controller
         }
         $token = Str::random(64);
 
+        // Simpan token ke tabel password_resets
         DB::table('password_resets')->updateOrInsert(
             ['email' => $request->email],
             [
@@ -53,6 +52,7 @@ class ForgotPasswordController extends Controller
             ]
         );
 
+        // Kirim email berisi link reset password
         $link = route('password.reset', $token) . '?email=' . $request->email;
 
         Mail::raw(
@@ -66,6 +66,7 @@ class ForgotPasswordController extends Controller
         return back()->with('success', 'Link reset password telah dikirim ke email.');
     }
 
+    // FORM RESET PASSWORD
     public function reset($token, Request $request)
     {
         return view('frontend.reset-password', [
@@ -74,6 +75,7 @@ class ForgotPasswordController extends Controller
         ]);
     }
 
+    // UPDATE PASSWORD BARU
     public function update(Request $request)
     {
         $request->validate([
@@ -91,6 +93,7 @@ class ForgotPasswordController extends Controller
             ]);
         }
 
+        // Update password pengguna
         DataPengguna::where('email', $request->email)->update([
             'password' => Hash::make($request->password),
         ]);

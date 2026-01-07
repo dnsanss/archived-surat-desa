@@ -31,9 +31,7 @@
         </div>
         @endif
 
-        {{-- ===============================
-            MODE RESET PASSWORD (ADA TOKEN)
-        ================================ --}}
+        {{-- MODE RESET PASSWORD --}}
         @if(isset($token))
 
         <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
@@ -87,9 +85,7 @@
             </button>
         </form>
 
-        {{-- ===============================
-            MODE KIRIM EMAIL
-        ================================ --}}
+        {{-- MODE KIRIM EMAIL --}}
         @else
 
         <form method="POST" action="{{ route('password.email') }}" class="space-y-4">

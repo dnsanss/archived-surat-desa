@@ -16,6 +16,7 @@ class GoogleAuthController extends Controller
 
     public function callback()
     {
+        // AMBIL DATA DARI GOOGLE
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (\Exception $e) {
@@ -48,14 +49,11 @@ class GoogleAuthController extends Controller
             }
         }
 
-        /**
-         * CEK DATA WAJIB
-         */
+        // CEK KELENGKAPAN DATA
         if (
             empty($pengguna->nik) ||
             empty($pengguna->nama)
         ) {
-            // ❗ JANGAN set pengguna_login
             Session::put('google_login_pending', true);
             Session::put('pengguna_id', $pengguna->id);
 
@@ -63,9 +61,7 @@ class GoogleAuthController extends Controller
                 ->with('info', 'Silakan lengkapi data diri Anda terlebih dahulu.');
         }
 
-        /**
-         * DATA SUDAH LENGKAP → LOGIN PENUH
-         */
+        // LOGIN BERHASIL
         Session::put('data_pengguna', $pengguna);
         Session::put('pengguna_login', true);
         Session::forget('google_login_pending');
