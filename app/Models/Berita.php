@@ -14,7 +14,27 @@ class Berita extends Model
         'isi',
         'gambar',
         'tanggal_publikasi',
+        'penulis',
     ];
+
+    public function getGambarUrlAttribute()
+    {
+        if (!$this->gambar) return null;
+
+        $baseUrl = rtrim(config('services.supabase.url'), '/');
+        $bucket  = trim(config('services.supabase.bucket'), '/');
+        $path    = ltrim($this->gambar, '/');
+
+        if (empty($bucket)) {
+            return "CONFIG_BUCKET_KOSONG_CEK_SERVICES_PHP";
+        }
+
+        if (str_starts_with($path, $bucket . '/')) {
+            $path = substr($path, strlen($bucket . '/'));
+        }
+
+        return "{$baseUrl}/storage/v1/object/public/{$bucket}/{$path}";
+    }
 
     protected static function boot()
     {

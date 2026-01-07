@@ -20,8 +20,8 @@ use App\Http\Controllers\StrukturPemerintahanController;
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
 
 // route untuk halaman struktur pemerintahan dengan data dari database
-Route::get('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index']);
-Route::post('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index'])->name('struktur-pemerintahan');
+Route::get('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index'])->name('struktur-pemerintahan');
+Route::post('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index']);
 
 // berita
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita');

@@ -1,6 +1,6 @@
 @include('layouts.navbar')
 
-<section class="pt-24 pb-16 bg-gray-50 min-h-screen">
+<div class="pt-24 pb-16 bg-gray-50 min-h-screen">
     <div class="max-w-6xl mx-auto px-6">
 
         <h2 class="text-3xl font-bold text-green-700 mb-6">
@@ -31,6 +31,6 @@
         @endif
 
     </div>
-</section>
+</div>
 
 @include('layouts.footer')
