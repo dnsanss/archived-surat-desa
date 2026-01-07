@@ -46,10 +46,18 @@
             </div>
 
             {{-- PASSWORD --}}
+            {{-- PASSWORD --}}
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">
-                    Password
-                </label>
+                <div class="flex items-center justify-between mb-1">
+                    <label class="text-sm font-semibold text-gray-700">
+                        Password
+                    </label>
+
+                    <a href="{{ route('password.request') }}"
+                        class="text-sm text-green-700 hover:text-green-800 font-medium">
+                        Lupa Password?
+                    </a>
+                </div>
 
                 <div class="relative">
                     <input
@@ -57,14 +65,14 @@
                         id="password"
                         name="password"
                         class="w-full rounded-xl border border-gray-300 px-4 py-2 pr-12
-                               focus:outline-none focus:ring-2 focus:ring-green-600"
+                   focus:outline-none focus:ring-2 focus:ring-green-600"
                         required>
 
                     <button
                         type="button"
                         onclick="togglePassword()"
                         class="absolute inset-y-0 right-0 flex items-center px-3
-                               text-gray-500 hover:text-green-700">
+                   text-gray-500 hover:text-green-700">
                         <span id="eyeIcon" class="material-icons">
                             visibility
                         </span>
@@ -80,14 +88,31 @@
             </button>
         </form>
 
-        {{-- REGISTER --}}
-        <p class="text-center mt-4 text-sm text-gray-600">
-            Belum punya akun?
-            <a href="{{ route('register') }}"
-                class="text-green-700 font-semibold hover:underline">
-                Daftar
+        {{-- GOOGLE LOGIN --}}
+        <div class="my-6">
+
+            <!-- Divider -->
+            <div class="flex items-center mb-4">
+                <div class="flex-grow border-t border-gray-300"></div>
+                <span class="mx-3 text-gray-500 text-sm font-medium">atau</span>
+                <div class="flex-grow border-t border-gray-300"></div>
+            </div>
+
+            <!-- Button Google -->
+            <a href="{{ route('google.login') }}"
+                class="w-full flex items-center justify-center gap-3
+               border border-gray-300 rounded-xl py-3
+               hover:bg-gray-100 transition">
+
+                <img src="https://developers.google.com/identity/images/g-logo.png"
+                    class="w-5 h-5">
+
+                <span class="font-semibold text-gray-700">
+                    Login dengan Google
+                </span>
             </a>
-        </p>
+
+        </div>
 
     </div>
 

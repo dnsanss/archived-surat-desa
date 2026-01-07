@@ -13,7 +13,7 @@
             Registrasi Akun
         </h2>
         <p class="text-center text-gray-600 mb-6 text-sm">
-            Daftar untuk mengakses layanan
+            Lengkapi data diri untuk mendaftar
             <span class="font-semibold text-green-700">SISEKAR</span>
         </p>
 
@@ -36,11 +36,6 @@
                 required>
 
             <input type="text" name="nik" placeholder="NIK"
-                class="w-full rounded-xl border border-gray-300 px-4 py-2
-                       focus:outline-none focus:ring-2 focus:ring-green-600"
-                required>
-
-            <input type="email" name="email" placeholder="Email"
                 class="w-full rounded-xl border border-gray-300 px-4 py-2
                        focus:outline-none focus:ring-2 focus:ring-green-600"
                 required>
