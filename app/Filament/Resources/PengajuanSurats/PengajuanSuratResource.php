@@ -14,7 +14,6 @@ use Filament\Actions\DeleteAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Forms\Components\Select;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -145,7 +144,17 @@ class PengajuanSuratResource extends Resource
                     ->icon('heroicon-o-document-check')
                     ->color('success')
                     ->action(function ($record) {
-                        // Jalankan proses surat
+                        // Cek kelengkapan data
+                        if (empty($record->diproses_oleh) || empty($record->kepada)) {
+                            Notification::make()
+                                ->title('Data Belum Lengkap')
+                                ->body('Harap lengkapi data surat sebelum memproses.')
+                                ->danger() // Warna merah
+                                ->send();
+
+                            return redirect()->back();
+                        }
+
                         $controller = app(\App\Http\Controllers\ProsesSuratController::class);
                         $controller->generate($record->id);
 

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\SuratKeluars;
 
 use App\Filament\Resources\SuratKeluarResource\Pages\ViewSuratKeluar;
-use Dom\Text;
 use BackedEnum;
 use Filament\Tables\Table;
 use App\Models\SuratTerbit;
@@ -17,11 +16,11 @@ use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\SuratKeluars\Pages\EditSuratKeluar;
 use App\Filament\Resources\SuratKeluars\Pages\ListSuratKeluars;
 use App\Filament\Resources\SuratKeluars\Pages\CreateSuratKeluar;
-use Faker\Core\File;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
-use PhpParser\Comment\Doc;
 
 class SuratKeluarResource extends Resource
 {
@@ -51,7 +50,7 @@ class SuratKeluarResource extends Resource
                 TextInput::make('diproses_oleh')
                     ->label('Diproses Oleh')
                     ->required(),
-                TextInput::make('tanggal_pengajuan')
+                DatePicker::make('tanggal_pengajuan')
                     ->label('Tanggal Pengajuan')
                     ->required(),
                 FileUpload::make('file_pdf')
@@ -104,7 +103,6 @@ class SuratKeluarResource extends Resource
             ->recordActions([
                 ViewAction::make()
                     ->url(fn($record) => SuratKeluarResource::getUrl('view', ['record' => $record])),
-                EditAction::make(),
                 DeleteAction::make(),
             ])
             ->bulkActions([
@@ -125,8 +123,6 @@ class SuratKeluarResource extends Resource
     {
         return [
             'index' => ListSuratKeluars::route('/'),
-            'create' => CreateSuratKeluar::route('/create'),
-            'edit' => EditSuratKeluar::route('/{record}/edit'),
             'view' => ViewSuratKeluar::route('/{record}'),
         ];
     }
