@@ -18,9 +18,9 @@ class DataPengguna extends Authenticatable
         'nama',
         'nik',
         'email',
+        'google_id',
         'nomor_hp',
         'password',
-        'verification_token',
         'email_verified_at',
     ];
 

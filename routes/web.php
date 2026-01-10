@@ -1,25 +1,27 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FrontendController;
-use App\Http\Controllers\WargaAuthController;
 use App\Http\Controllers\ProsesSuratController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PelacakanSuratController;
-use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\WargaPengajuanController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\VerifikasiSuratController;
 use App\Http\Controllers\PenyimpananSuratController;
+use App\Http\Controllers\StrukturPemerintahanController;
 
 // import controller pengajuan surat
 Route::get('/profil-desa', [FrontendController::class, 'profilDesa'])->name('profil-desa');
 
-// route untuk halaman struktur pemerintahan
-Route::get('/struktur-pemerintahan', function () {
-    return view('frontend.struktur-pemerintahan');
-})->name('struktur-pemerintahan');
+// route untuk halaman struktur pemerintahan dengan data dari database
+Route::get('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index'])->name('struktur-pemerintahan');
+Route::post('/struktur-pemerintahan', [StrukturPemerintahanController::class, 'index']);
 
 // berita
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
@@ -141,16 +143,6 @@ Route::middleware('guest.pengguna')->group(function () {
     Route::post('/register', [AuthController::class, 'registerSubmit'])->name('register.submit');
 });
 
-// route untuk verifikasi email pengguna
-Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail'])
-    ->name('email.verify');
-
-// route untuk halaman pemberitahuan email belum verifikasi
-Route::get('/email-belum-verifikasi', function () {
-    return view('frontend.email-not-verified');
-})->name('email.notice');
-
-
 // 3 fitur utama di pengajuan surat
 Route::middleware('pengguna')->group(function () {
     // logout
@@ -181,3 +173,22 @@ Route::middleware('pengguna')->group(function () {
 // route untuk download surat di penyimpanan surat
 Route::get('/download-surat/{token}', [PenyimpananSuratController::class, 'download'])
     ->name('surat.download');
+
+// route untuk autentikasi google
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])
+    ->name('google.login');
+
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+    ->name('google.callback');
+
+//route reset password
+Route::get('/lupa-password', [ForgotPasswordController::class, 'request'])
+    ->name('password.request');
+
+Route::post('/lupa-password', [ForgotPasswordController::class, 'sendLink'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'reset'])
+    ->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'update'])
+    ->name('password.update');

@@ -191,20 +191,20 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @foreach ($berita_terbaru as $item)
-                <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition">
-                    <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}"
-                        class="w-full h-40 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-2">{{ $item->judul }}</h3>
-                        <p class="text-gray-500 text-sm mb-3">
-                            {{ \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') }}
-                        </p>
-                        <a href="{{ route('berita.judul', $item->id) }}"
-                            class="text-green-600 font-medium text-sm hover:underline">
-                            Baca Selengkapnya →
-                        </a>
-                    </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition">
+                <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }}"
+                    class="w-full h-40 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-2">{{ $item->judul }}</h3>
+                    <p class="text-gray-500 text-sm mb-3">
+                        {{ \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') }}
+                    </p>
+                    <a href="{{ route('berita.judul', $item->id) }}"
+                        class="text-green-600 font-medium text-sm hover:underline">
+                        Baca Selengkapnya →
+                    </a>
                 </div>
+            </div>
             @endforeach
         </div>
     </section>

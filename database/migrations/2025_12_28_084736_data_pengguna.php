@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('data_pengguna', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->id();
             $table->string('nama');
-            $table->string('nik', 16);
+            $table->string('nik', 16)->nullable();
             $table->string('email')->unique();
             $table->string('nomor_hp')->nullable();
 
             // Auth
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('verification_token')->nullable();
+            $table->string('google_id')->nullable();
 
             $table->timestamps();
 
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->foreign('nik')
                 ->references('nik')
                 ->on('data_warga')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
         });
     }
 

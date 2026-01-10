@@ -13,10 +13,10 @@ class BeritaController extends Controller
     public function index()
     {
         // Ambil data berita dari database, urutkan dari terbaru, dan tampilkan 9 berita per halaman
-        $beritas = Berita::orderBy('tanggal_publikasi', 'desc')->paginate(9);
+        $berita = Berita::orderBy('tanggal_publikasi', 'desc')->paginate(9);
 
         // Kirim data berita ke view frontend.berita
-        return view('frontend.berita', compact('beritas'));
+        return view('frontend.berita', compact('berita'));
     }
 
     /**
@@ -55,7 +55,7 @@ class BeritaController extends Controller
         $data = $request->only(['judul', 'isi', 'tanggal_publikasi', 'penulis']);
 
         if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('berita', 'public');
+            $data['gambar'] = $request->file('gambar')->store('', 'supabase');
         }
 
         Berita::create($data);

@@ -10,19 +10,19 @@
 
         {{-- Info tambahan --}}
         <p class="text-center text-sm text-gray-500 mb-6">
-            Dipublikasikan pada 
+            Dipublikasikan pada
             <span class="font-medium text-green-700">
                 {{ \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d M Y') }}
             </span>
-            oleh 
+            oleh
             <span class="font-semibold text-gray-800">{{ $berita->penulis }}</span>
         </p>
 
         {{-- Gambar Berita --}}
-        @if ($berita->gambar)
-            <img src="{{ asset('storage/' . $berita->gambar) }}" 
-                 alt="{{ $berita->judul }}" 
-                 class="w-full h-[450px] object-cover rounded-xl mb-8 shadow-md border">
+        @if ($berita->gambar_url)
+        <img src="{{ $berita->gambar_url }}"
+            alt="{{ $berita->judul }}"
+            class="w-full h-[450px] object-cover rounded-xl mb-8 shadow-md ">
         @endif
 
         {{-- Isi Berita --}}
@@ -32,8 +32,8 @@
 
         {{-- Tombol kembali --}}
         <div class="text-center">
-            <a href="{{ route('berita') }}" 
-               class="bg-green-600 text-white font-semibold px-6 py-3 rounded-full shadow hover:bg-green-700 transition">
+            <a href="{{ route('berita') }}"
+                class="bg-green-600 text-white font-semibold px-6 py-3 rounded-full shadow hover:bg-green-700 transition">
                 ← Kembali ke Daftar Berita
             </a>
         </div>

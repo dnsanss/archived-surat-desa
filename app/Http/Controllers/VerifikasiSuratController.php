@@ -39,16 +39,19 @@ class VerifikasiSuratController extends Controller
     {
         $surat = SuratTerbit::where('qr_token', $token)->firstOrFail();
 
-        // PATH SUDAH RELATIF (tanpa storage/)
-        $fullPath = storage_path('app/' . $surat->file_pdf);
-
-        if (!file_exists($fullPath)) {
+        if (!$surat->file_pdf) {
             abort(404, 'File surat tidak ditemukan.');
         }
 
-        // Nama file aman (tidak mengandung / atau \)
+        // URL file Supabase
+        $fileUrl = config('services.supabase.url')
+            . '/storage/v1/object/public/'
+            . config('services.supabase.bucket')
+            . '/' . $surat->file_pdf;
+
+        // Nama file aman
         $namaFile = 'Surat-' . str_replace(['/', '\\'], '-', $surat->nomor_surat) . '.pdf';
 
-        return response()->download($fullPath, $namaFile);
+        return redirect()->away($fileUrl . '?download=' . urlencode($namaFile));
     }
 }
