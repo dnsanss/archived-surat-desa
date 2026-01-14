@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class DataPengguna extends Authenticatable
 {
     use Notifiable;
+    use HasApiTokens;
 
     protected $table = 'data_pengguna';
     public $incrementing = false;
