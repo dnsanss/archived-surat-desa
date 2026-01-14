@@ -53,6 +53,17 @@ class PengajuanSuratController extends Controller
         ], 201);
     }
 
+    private function mapStatus(string $status): string
+    {
+        return match ($status) {
+            'menunggu' => 'Belum diproses',
+            'selesai' => 'Selesai',
+            default => ucfirst($status),
+        };
+    }
+
+
+
     public function index(Request $request)
     {
         $user = $request->user(); // dari Sanctum
@@ -89,13 +100,65 @@ class PengajuanSuratController extends Controller
                     'tanggal_pengajuan' => $item->tanggal_pengajuan
                         ? $item->tanggal_pengajuan->format('d-m-Y')
                         : $item->created_at->format('d-m-Y'),
-                    'status' => $item->status,
+                    'status' => $this->mapStatus($item->status),
                 ];
             });
 
         return response()->json([
             'success' => true,
             'data' => $pengajuan
+        ]);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        // Ambil pengguna
+        $pengguna = DataPengguna::findOrFail($user->id);
+
+        // Ambil warga via NIK
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
+
+        if (!$warga) {
+            return response()->json([
+                'message' => 'Data warga tidak ditemukan'
+            ], 404);
+        }
+
+        // Ambil pengajuan + validasi kepemilikan
+        $pengajuan = PengajuanSurat::with('template')
+            ->where('id', $id)
+            ->where('warga_id', $warga->id)
+            ->first();
+
+        if (!$pengajuan) {
+            return response()->json([
+                'message' => 'Pengajuan surat tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $pengajuan->id,
+                'nama' => $pengajuan->nama,
+                'nik' => $pengajuan->nik,
+                'jenis_surat' => $pengajuan->template->nama_template ?? '-',
+                'nomor_surat' => $pengajuan->nomor_surat,
+                'isi_surat' => $pengajuan->isi_surat,
+                'tanggal' => $pengajuan->tanggal_pengajuan
+                    ? $pengajuan->tanggal_pengajuan->format('d-m-Y')
+                    : $pengajuan->created_at->format('d-m-Y'),
+                'jam' => $pengajuan->created_at->format('H:i'),
+                'status' => $this->mapStatus($pengajuan->status),
+            ]
         ]);
     }
 }
