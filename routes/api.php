@@ -12,3 +12,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store']);
 });
+Route::middleware('auth:sanctum')->get(
+    '/pengajuan-surat',
+    [PengajuanSuratController::class, 'index']
+);

@@ -52,4 +52,50 @@ class PengajuanSuratController extends Controller
             'data' => $pengajuan
         ], 201);
     }
+
+    public function index(Request $request)
+    {
+        $user = $request->user(); // dari Sanctum
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        // Ambil data pengguna
+        $pengguna = DataPengguna::findOrFail($user->id);
+
+        // Ambil warga berdasarkan NIK
+        $warga = DataWarga::where('nik', $pengguna->nik)->first();
+
+        if (!$warga) {
+            return response()->json([
+                'message' => 'Data warga tidak ditemukan'
+            ], 404);
+        }
+
+        // Ambil pengajuan surat milik warga
+        $pengajuan = PengajuanSurat::with('template')
+            ->where('warga_id', $warga->id)
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'nama' => $item->nama,
+                    'nik' => $item->nik,
+                    'jenis_surat' => $item->template->nama_template ?? '-',
+                    'tanggal_pengajuan' => $item->tanggal_pengajuan
+                        ? $item->tanggal_pengajuan->format('d-m-Y')
+                        : $item->created_at->format('d-m-Y'),
+                    'status' => $item->status,
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $pengajuan
+        ]);
+    }
 }
