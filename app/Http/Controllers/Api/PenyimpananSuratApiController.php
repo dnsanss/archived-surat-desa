@@ -24,6 +24,7 @@ class PenyimpananSuratApiController extends Controller
             ], 403);
         }
 
+        // ambil data surat terbit milik warga tersebut
         $surat = SuratTerbit::with(['pengajuan.template'])
             ->whereHas('pengajuan', function ($q) use ($warga) {
                 $q->where('warga_id', $warga->id);
@@ -33,12 +34,18 @@ class PenyimpananSuratApiController extends Controller
             ->map(function ($item) {
                 return [
                     'id' => $item->id,
+                    'pukul' => Carbon::parse($item->created_at)
+                        ->timezone('Asia/Jakarta')
+                        ->format('H:i:s'),
+                    'nama' => $item->pengajuan->nama,
                     'nomor_surat' => $item->nomor_surat,
                     'nama_surat' => $item->pengajuan->template->nama_template,
+                    'nik' => $item->pengajuan->nik,
                     'tanggal' => Carbon::parse($item->created_at)
                         ->timezone('Asia/Jakarta')
                         ->format('d F Y'),
                     'qr_token' => $item->qr_token,
+                    'diproses_oleh' => $item->diproses_oleh,
                 ];
             });
 
@@ -65,11 +72,17 @@ class PenyimpananSuratApiController extends Controller
             'data' => [
                 'id' => $surat->id,
                 'nomor_surat' => $surat->nomor_surat,
+                'pukul' => Carbon::parse($surat->created_at)
+                    ->timezone('Asia/Jakarta')
+                    ->format('H:i:s'),
+                'nama' => $surat->pengajuan->nama,
+                'nik' => $surat->pengajuan->nik,
                 'nama_surat' => $surat->pengajuan->template->nama_template,
                 'tanggal' => Carbon::parse($surat->created_at)
                     ->timezone('Asia/Jakarta')
                     ->format('d F Y'),
                 'qr_token' => $surat->qr_token,
+                'diproses_oleh' => $surat->diproses_oleh,
             ]
         ]);
     }

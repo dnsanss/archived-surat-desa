@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\DataPengguna;
 use App\Models\DataWarga;
+use App\Helpers\SuratHelper;
+use App\Models\DataPengguna;
+use Illuminate\Http\Request;
 use App\Models\TemplateSurat;
 use App\Models\PengajuanSurat;
-use App\Helpers\SuratHelper;
+use Carbon\Carbon;
+use App\Http\Controllers\Controller;
 
 class PengajuanSuratController extends Controller
 {
@@ -16,6 +17,9 @@ class PengajuanSuratController extends Controller
     {
         $request->validate([
             'template_id' => 'required|exists:templates_surat,id',
+            'nik' => 'required',
+            'nama' => 'required',
+            'nomor_wa' => 'required',
         ]);
 
         $user = $request->user(); // 🔑 dari Sanctum
@@ -56,13 +60,11 @@ class PengajuanSuratController extends Controller
     private function mapStatus(string $status): string
     {
         return match ($status) {
-            'menunggu' => 'Belum diproses',
-            'selesai' => 'Selesai',
+            'status_raw'   => $status,          // menunggu | selesai
+            'status_label' => $this->mapStatus(...),  // Belum diproses
             default => ucfirst($status),
         };
     }
-
-
 
     public function index(Request $request)
     {
@@ -97,9 +99,11 @@ class PengajuanSuratController extends Controller
                     'nama' => $item->nama,
                     'nik' => $item->nik,
                     'jenis_surat' => $item->template->nama_template ?? '-',
-                    'tanggal_pengajuan' => $item->tanggal_pengajuan
-                        ? $item->tanggal_pengajuan->format('d-m-Y')
-                        : $item->created_at->format('d-m-Y'),
+                    'tanggal_pengajuan' => $item->tanggal_jakarta = Carbon::parse($item->created_at)
+                        ->timezone('Asia/Jakarta')
+                        ->format('d F Y'),
+                    'pukul' => $item->created_at->format('H:i'),
+                    'diproses_oleh' => $item->diproses_oleh ?? '-',
                     'status' => $this->mapStatus($item->status),
                 ];
             });
@@ -153,9 +157,9 @@ class PengajuanSuratController extends Controller
                 'jenis_surat' => $pengajuan->template->nama_template ?? '-',
                 'nomor_surat' => $pengajuan->nomor_surat,
                 'isi_surat' => $pengajuan->isi_surat,
-                'tanggal' => $pengajuan->tanggal_pengajuan
-                    ? $pengajuan->tanggal_pengajuan->format('d-m-Y')
-                    : $pengajuan->created_at->format('d-m-Y'),
+                'tanggal_pengajuan' => $pengajuan->tanggal_jakarta = Carbon::parse($pengajuan->created_at)
+                    ->timezone('Asia/Jakarta')
+                    ->format('d F Y'),
                 'jam' => $pengajuan->created_at->format('H:i'),
                 'status' => $this->mapStatus($pengajuan->status),
             ]
