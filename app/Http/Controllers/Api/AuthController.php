@@ -43,8 +43,9 @@ class AuthController extends Controller
             'token' => $token,
             'user' => [
                 'id' => $user->id,
-                'nik' => $user->nik,
                 'nama' => $user->nama,
+                'nik' => $user->nik,
+                'nomor_hp' => $user->nomor_hp,
             ]
         ]);
     }
